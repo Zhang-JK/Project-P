@@ -1,5 +1,7 @@
 package com.jk.projectp.model;
 
+import com.jk.projectp.utils.dataenum.OrderState;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -15,7 +17,8 @@ public class Order {
     private Integer id;
 
     @Column(name = "state", nullable = false, length = 30)
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private OrderState state;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false)
@@ -49,11 +52,11 @@ public class Order {
         this.id = id;
     }
 
-    public String getState() {
+    public OrderState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(OrderState state) {
         this.state = state;
     }
 

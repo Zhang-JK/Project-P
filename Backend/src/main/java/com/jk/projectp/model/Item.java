@@ -1,5 +1,8 @@
 package com.jk.projectp.model;
 
+import com.jk.projectp.utils.dataenum.OrderPlatform;
+import com.jk.projectp.utils.dataenum.OrderState;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -17,10 +20,12 @@ public class Item {
     private Order order;
 
     @Column(name = "state", nullable = false, length = 30)
-    private String state;
+    @Enumerated(EnumType.STRING)
+    private OrderState state;
 
     @Column(name = "platform", nullable = false, length = 50)
-    private String platform;
+    @Enumerated(EnumType.STRING)
+    private OrderPlatform platform;
 
     @Column(name = "link", length = 500)
     private String link;
@@ -84,19 +89,19 @@ public class Item {
         this.order = order;
     }
 
-    public String getState() {
+    public OrderState getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(OrderState state) {
         this.state = state;
     }
 
-    public String getPlatform() {
+    public OrderPlatform getPlatform() {
         return platform;
     }
 
-    public void setPlatform(String platform) {
+    public void setPlatform(OrderPlatform platform) {
         this.platform = platform;
     }
 
