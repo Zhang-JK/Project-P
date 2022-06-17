@@ -36,6 +36,17 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
 
+    @Column(name = "session", length = 128)
+    private String session;
+
+    public String getSession() {
+        return session;
+    }
+
+    public void setSession(String session) {
+        this.session = session;
+    }
+
     public Integer getId() {
         return id;
     }
