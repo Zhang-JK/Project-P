@@ -5,7 +5,10 @@ public enum ResponseCode {
     SUCCESS(200, "Success"),
     LIMIT_EXCEED(400, "Limit exceed max"),
     LOGIN_USER_NOT_EXIST(1001, "User not exist"),
-    LOGIN_WRONG_PASSWORD(1002, "Wrong password");
+    LOGIN_WRONG_PASSWORD(1002, "Wrong password"),
+
+    NOT_LOGIN(1003, "Not login"),
+    USER_NOT_EXIST(1004, "User not exist"),;
 
     private final int code;
     private final String msg;

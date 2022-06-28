@@ -7,6 +7,8 @@ import cn.hutool.crypto.SecureUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 @Service
@@ -43,11 +45,32 @@ public class UserService {
         clearSession(userDB);
     }
 
-    public boolean verifySession(String username, String session) {
-        User user = getByUsername(username);
-        if (user != null){
-            return user.getSession().equals(session);
+    public boolean verifySession(User userDB, String session) {
+        if (userDB != null){
+            return userDB.getSession().equals(session);
         }
         return false;
+    }
+    public User checkLogin(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String username = null;
+        String session = null;
+        User user = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("username")) {
+                username = cookie.getValue();
+                user = getByUsername(username);
+            }
+            if (cookie.getName().equals("session")) {
+                session = cookie.getValue();
+            }
+        }
+        if (user == null || username == null || session == null) {
+            return null;
+        }
+        if (!verifySession(user, session)) {
+            return null;
+        }
+        return user;
     }
 }

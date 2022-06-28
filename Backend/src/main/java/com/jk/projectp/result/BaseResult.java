@@ -13,7 +13,23 @@ public class BaseResult<T> {
         this.data = null;
     }
 
-    public BaseResult(ResponseCode code){
+    public int getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public BaseResult(ResponseCode code) {
         this.code = code.getCode();
         this.msg = code.getMsg();
         this.data = null;
