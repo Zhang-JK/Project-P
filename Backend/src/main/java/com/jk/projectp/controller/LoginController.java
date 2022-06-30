@@ -23,6 +23,8 @@ public class LoginController {
     @ResponseBody
     public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
 //        System.out.println("login");
+        System.out.println(requestUser.getUsername());
+        System.out.println(requestUser.getPassword());
         User user = userService.getByUsername(requestUser.getUsername());
         if (user == null) {
             return new BaseResult<>(ResponseCode.LOGIN_USER_NOT_EXIST);
