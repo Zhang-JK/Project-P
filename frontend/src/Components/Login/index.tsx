@@ -1,6 +1,8 @@
 import React, {useRef, FC, ReactElement} from "react";
 import {config} from "../../Config.js";
 import {md5} from "hash-wasm";
+import {History} from "history";
+import {useNavigate} from "react-router-dom";
 
 class AppProps {
 }
@@ -8,8 +10,8 @@ class AppProps {
 class AppState {
 }
 
-const Index: FC<AppProps> = ({}): ReactElement => {
-
+const Login: FC<AppProps> = (): ReactElement => {
+    const navigate = useNavigate();
     const usernameI = useRef<HTMLInputElement>(null);
     const passwordI = useRef<HTMLInputElement>(null);
     let encodedPassword: string = String("");
@@ -42,8 +44,10 @@ const Index: FC<AppProps> = ({}): ReactElement => {
                     console.log(" sending request1");
                     fetch(config.apiUrl + "login", requestOptions).then(response => response.json()).then(data => {
                         const {code, msg} = data;
+                        console.log("raw data: " + JSON.stringify(data));
                         if (code === 200) {
                             alert(" login success");
+                            // navigate('/index', {replace: false});
                         } else {
                             alert("Error: " + msg);
                         }
@@ -56,4 +60,4 @@ const Index: FC<AppProps> = ({}): ReactElement => {
 
 }
 
-export default Index;
+export default Login;

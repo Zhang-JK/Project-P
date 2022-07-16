@@ -34,9 +34,13 @@ public class LoginController {
         }
         String session = userService.createSession(user);
         Cookie sessionCookie = new Cookie("session", session);
-//        sessionCookie.setDomain("/api");
+//        sessionCookie.setDomain("localhost:3000");
+        sessionCookie.setPath("/");
+        sessionCookie.setMaxAge(60 * 60 * 24 * 7);
         Cookie usernameCookie = new Cookie("username", requestUser.getUsername());
-//        usernameCookie.setDomain("/api");
+//        usernameCookie.setDomain("localhost:3000");
+        usernameCookie.setPath("/");
+        usernameCookie.setMaxAge(60 * 60 * 24 * 7);
         response.addCookie(usernameCookie);
         response.addCookie(sessionCookie);
         return new BaseResult<>(ResponseCode.SUCCESS);
