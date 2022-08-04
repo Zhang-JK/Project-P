@@ -24,6 +24,17 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "role")
+    private Set<RolePage> rolePages = new LinkedHashSet<>();
+
+    public Set<RolePage> getRolePages() {
+        return rolePages;
+    }
+
+    public void setRolePages(Set<RolePage> rolePages) {
+        this.rolePages = rolePages;
+    }
+
     public Integer getId() {
         return id;
     }
