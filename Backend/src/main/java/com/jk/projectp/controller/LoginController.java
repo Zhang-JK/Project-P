@@ -2,6 +2,8 @@ package com.jk.projectp.controller;
 
 import com.jk.projectp.model.User;
 import com.jk.projectp.result.BaseResult;
+import com.jk.projectp.result.UserInfoResponse;
+import com.jk.projectp.result.pojo.UserPojo;
 import com.jk.projectp.service.ResponseCode;
 import com.jk.projectp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +70,19 @@ public class LoginController {
         }
         userService.updatePassword(user, newPassword);
         return new BaseResult<>(ResponseCode.SUCCESS);
+    }
+
+
+    @CrossOrigin
+    @GetMapping(value = "/api/user/getInfo")
+    @ResponseBody
+    public BaseResult<UserInfoResponse> getInfo(HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+
+        UserInfoResponse response = new UserInfoResponse(user, user.getUserProjects(), user.getRoles());
+        return new BaseResult<>(ResponseCode.SUCCESS, response);
     }
 }
