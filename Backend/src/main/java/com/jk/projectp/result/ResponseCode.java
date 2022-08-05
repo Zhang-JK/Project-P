@@ -1,4 +1,4 @@
-package com.jk.projectp.service;
+package com.jk.projectp.result;
 
 public enum ResponseCode {
 
