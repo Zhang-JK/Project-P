@@ -4,12 +4,16 @@ import cn.hutool.core.util.IdUtil;
 import com.jk.projectp.dao.UserDAO;
 import com.jk.projectp.model.User;
 import cn.hutool.crypto.SecureUtil;
+import com.jk.projectp.result.MemberResponse;
+import com.jk.projectp.result.pojo.UserPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class UserService {
@@ -55,6 +59,7 @@ public class UserService {
         }
         return false;
     }
+
     public User checkLogin(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String username = null;
@@ -76,5 +81,13 @@ public class UserService {
             return null;
         }
         return user;
+    }
+
+    public Set<MemberResponse> getAllUsersWithRole() {
+        Set<MemberResponse> res = new HashSet<>();
+        for (User user : userDAO.findAll()) {
+            res.add(new MemberResponse(user, user.getRoles()));
+        }
+        return res;
     }
 }
