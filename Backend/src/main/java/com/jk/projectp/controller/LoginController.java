@@ -25,9 +25,11 @@ public class LoginController {
     public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
         User user = userService.getByUsername(requestUser.getUsername());
         if (user == null) {
+            userService.removeCookie(response);
             return new BaseResult<>(ResponseCode.LOGIN_USER_NOT_EXIST);
         }
         if (!userService.verifyPassword(user, requestUser.getPassword())) {
+            userService.removeCookie(response);
             return new BaseResult<>(ResponseCode.LOGIN_WRONG_PASSWORD);
         }
         String session = userService.createSession(user);
@@ -46,12 +48,13 @@ public class LoginController {
     @CrossOrigin
     @PostMapping(value = "/api/user/logout")
     @ResponseBody
-    public BaseResult<String> logout(HttpServletRequest request) {
+    public BaseResult<String> logout(HttpServletRequest request, HttpServletResponse response) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         userService.clearSession(user);
+        userService.removeCookie(response);
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 

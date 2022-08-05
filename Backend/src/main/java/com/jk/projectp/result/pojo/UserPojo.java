@@ -11,16 +11,16 @@ public class UserPojo {
         name = user.getName();
     }
 
-    int id;
+    Integer id;
     String username;
     String email;
     String name;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
