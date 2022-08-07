@@ -46,10 +46,12 @@ public class UserService {
     }
 
     public boolean verifySession(User userDB, String session) {
-        if (session.equals(""))
-            return false;
-        if (userDB != null) {
-            return userDB.getSession().equals(session);
+        if (userDB != null){
+            String sessionDB = userDB.getSession();
+            if (sessionDB != null)
+                return sessionDB.equals(session);
+            else
+                return false;
         }
         return false;
     }

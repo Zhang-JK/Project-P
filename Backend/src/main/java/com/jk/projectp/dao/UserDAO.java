@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface UserDAO extends JpaRepository<User, Integer> {
     User findByUsername(String username);
+
+//    <S extends User>S save(S entity);
 }
