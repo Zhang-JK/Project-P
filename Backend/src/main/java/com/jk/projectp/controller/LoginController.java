@@ -2,6 +2,8 @@ package com.jk.projectp.controller;
 
 import com.jk.projectp.model.User;
 import com.jk.projectp.result.BaseResult;
+import com.jk.projectp.result.UserInfoResponse;
+import com.jk.projectp.result.pojo.UserPojo;
 import com.jk.projectp.service.ResponseCode;
 import com.jk.projectp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,9 @@ public class LoginController {
     private UserService userService;
 
     @CrossOrigin
-    @PostMapping(value = "/api/login")
+    @PostMapping(value = "/api/user/login")
     @ResponseBody
     public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
-//        System.out.println("login");
-        System.out.println(requestUser.getUsername());
-        System.out.println(requestUser.getPassword());
         User user = userService.getByUsername(requestUser.getUsername());
         if (user == null) {
             return new BaseResult<>(ResponseCode.LOGIN_USER_NOT_EXIST);
@@ -34,11 +33,9 @@ public class LoginController {
         }
         String session = userService.createSession(user);
         Cookie sessionCookie = new Cookie("session", session);
-//        sessionCookie.setDomain("localhost:3000");
         sessionCookie.setPath("/");
         sessionCookie.setMaxAge(60 * 60 * 24 * 7);
         Cookie usernameCookie = new Cookie("username", requestUser.getUsername());
-//        usernameCookie.setDomain("localhost:3000");
         usernameCookie.setPath("/");
         usernameCookie.setMaxAge(60 * 60 * 24 * 7);
         response.addCookie(usernameCookie);
@@ -47,13 +44,10 @@ public class LoginController {
     }
 
 
-
-
     @CrossOrigin
-    @PostMapping(value = "/api/logout")
+    @PostMapping(value = "/api/user/logout")
     @ResponseBody
     public BaseResult<String> logout(HttpServletRequest request) {
-//        System.out.println("logout");
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
@@ -62,11 +56,11 @@ public class LoginController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
+
     @CrossOrigin
-    @PostMapping(value = "/api/changePassword")
+    @GetMapping(value = "/api/user/changePassword")
     @ResponseBody
     public BaseResult<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword, HttpServletRequest request) {
-//        System.out.println("changePassword");
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
@@ -76,5 +70,19 @@ public class LoginController {
         }
         userService.updatePassword(user, newPassword);
         return new BaseResult<>(ResponseCode.SUCCESS);
+    }
+
+
+    @CrossOrigin
+    @GetMapping(value = "/api/user/getInfo")
+    @ResponseBody
+    public BaseResult<UserInfoResponse> getInfo(HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+
+        UserInfoResponse response = new UserInfoResponse(user, user.getUserProjects(), user.getRoles());
+        return new BaseResult<>(ResponseCode.SUCCESS, response);
     }
 }

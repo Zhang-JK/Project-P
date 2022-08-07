@@ -3,8 +3,8 @@ package com.jk.projectp.result;
 import com.jk.projectp.service.ResponseCode;
 
 public class BaseResult<T> {
-    private int code;
-    private String msg;
+    private final int code;
+    private final String msg;
     private T data;
 
     public BaseResult(int code, String msg) {
@@ -33,5 +33,11 @@ public class BaseResult<T> {
         this.code = code.getCode();
         this.msg = code.getMsg();
         this.data = null;
+    }
+
+    public BaseResult(ResponseCode code, T data) {
+        this.code = code.getCode();
+        this.msg = code.getMsg();
+        this.data = data;
     }
 }

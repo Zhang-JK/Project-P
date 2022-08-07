@@ -1,5 +1,7 @@
 package com.jk.projectp.model;
 
+import com.jk.projectp.utils.dataenum.ProjectRole;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,7 +21,8 @@ public class UserProject {
     private User user;
 
     @Column(name = "role")
-    private Integer role;
+    @Enumerated(EnumType.STRING)
+    private ProjectRole role;
 
     public UserProjectId getId() {
         return id;
@@ -45,11 +48,11 @@ public class UserProject {
         this.user = user;
     }
 
-    public Integer getRole() {
+    public ProjectRole getRole() {
         return role;
     }
 
-    public void setRole(Integer role) {
+    public void setRole(ProjectRole role) {
         this.role = role;
     }
 
