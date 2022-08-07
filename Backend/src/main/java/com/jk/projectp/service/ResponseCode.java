@@ -12,6 +12,8 @@ public enum ResponseCode {
     CREATING_FB_ERROR(1010, "Error in creating feedback!"),
     FB_NOT_EXIST(1011, "Feedback not exist!"),
     CREATING_COMMENT_ERROR(1012, "Error in creating comment!"),
+
+    COMMENT_NOT_EXIST(1013, "Comment not exist!"),
     ;
 
     private final int code;
