@@ -1,6 +1,8 @@
 package com.jk.projectp.model;
 
 
+import com.jk.projectp.utils.dataenum.FeedbackStatus;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.UUID;
@@ -13,9 +15,6 @@ public class Feedback {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "message_id", nullable = false)
-    private Integer messageId;
-
     @Column(name = "content", length = 512)
     private String content;
 
@@ -24,17 +23,17 @@ public class Feedback {
     private User fromUid;
 
     @Column(name = "status", nullable = false, length = 10)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private FeedbackStatus status;
 
     @Column(name = "time", nullable = false)
     private Instant time;
 
     public Feedback(String msg, User user, Instant time) {
         this.content = msg;
-        this.messageId = UUID.randomUUID().toString().hashCode();
         this.fromUid = user;
         this.time = time;
-        this.status = "Started";
+        this.status = FeedbackStatus.STARTED;
     }
 
     public Feedback() {
@@ -50,11 +49,11 @@ public class Feedback {
         this.time = time;
     }
 
-    public String getStatus() {
+    public FeedbackStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(FeedbackStatus status) {
         this.status = status;
     }
 
@@ -72,14 +71,6 @@ public class Feedback {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public Integer getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(Integer messageId) {
-        this.messageId = messageId;
     }
 
 
