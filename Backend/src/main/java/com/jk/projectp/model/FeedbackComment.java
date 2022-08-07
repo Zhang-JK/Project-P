@@ -5,7 +5,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "comment_message_feedback")
-public class CommentMessageFeedback {
+public class FeedbackComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -13,14 +13,14 @@ public class CommentMessageFeedback {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "message_id", nullable = false, referencedColumnName = "id")
-    private Feedback message;
+    private Feedback feedback;
 
     @Column(name = "content", length = 512)
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
-    private CommentMessageFeedback parent;
+    private FeedbackComment parent;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_uid")
@@ -29,15 +29,15 @@ public class CommentMessageFeedback {
     @Column(name = "time", nullable = false)
     private Instant time;
 
-    public CommentMessageFeedback(String msg, User user, CommentMessageFeedback parent, Feedback messageFeedback, Instant time) {
+    public FeedbackComment(String msg, User user, FeedbackComment parent, Feedback messageFeedback, Instant time) {
         this.content = msg;
         this.fromUid = user;
-        this.message = messageFeedback;
+        this.feedback = messageFeedback;
         this.parent = parent;
         this.time = time;
     }
 
-    public CommentMessageFeedback() {
+    public FeedbackComment() {
         super();
     }
 
@@ -57,11 +57,11 @@ public class CommentMessageFeedback {
         this.fromUid = fromUid;
     }
 
-    public CommentMessageFeedback getParent() {
+    public FeedbackComment getParent() {
         return parent;
     }
 
-    public void setParent(CommentMessageFeedback parent) {
+    public void setParent(FeedbackComment parent) {
         this.parent = parent;
     }
 
@@ -73,12 +73,12 @@ public class CommentMessageFeedback {
         this.content = content;
     }
 
-    public Feedback getMessage() {
-        return message;
+    public Feedback getFeedback() {
+        return feedback;
     }
 
-    public void setMessage(Feedback message) {
-        this.message = message;
+    public void setFeedback(Feedback message) {
+        this.feedback = message;
     }
 
     public Integer getId() {
