@@ -30,11 +30,11 @@ const Login = () => {
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             'username': usernameI.current.value.toString(),
-                        'password': encodedPassword
-                })
-                };
+                            'password': encodedPassword
+                        })
+                    };
                     console.log(" sending request1");
-                    fetch(config.apiUrl + "login", requestOptions).then(response => response.json()).then(data => {
+                    fetch(config.userApiUrl + "login", requestOptions, {withCredentials: true}).then(response => response.json()).then(data => {
                         const {code, msg} = data;
                         console.log("raw data: " + JSON.stringify(data));
                         if (code === 200) {
