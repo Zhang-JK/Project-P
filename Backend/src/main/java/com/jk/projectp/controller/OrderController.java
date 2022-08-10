@@ -23,7 +23,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/createOrder")
     @ResponseBody
     public BaseResult<String> createOrder(@RequestBody Order requestOrder, HttpServletRequest request) {
@@ -36,7 +36,7 @@ public class OrderController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/updateOrder")
     @ResponseBody
     public BaseResult<String> updateOrder(@RequestBody Order requestOrder, HttpServletRequest request) {
