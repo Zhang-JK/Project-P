@@ -1,18 +1,18 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
-import IndexPage from "./Pages/IndexPage";
+import HomePage from "./Pages/HomePage";
 
 function App() {
-  return (
-    <div className="App">
-      <Routes>
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/index" element={<IndexPage/>}/>
-      </Routes>
-    </div>
-  );
+    console.log("app")
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/home" element={<HomePage/>}/>
+                <Route path="/login" element={<LoginPage/>}/>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;

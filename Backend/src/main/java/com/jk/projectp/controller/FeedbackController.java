@@ -8,8 +8,8 @@ import com.jk.projectp.request.FeedbackRequest;
 import com.jk.projectp.result.BaseResult;
 import com.jk.projectp.result.FeedbackCommentResponse;
 import com.jk.projectp.result.FeedbackResponse;
+import com.jk.projectp.result.ResponseCode;
 import com.jk.projectp.service.FeedbackService;
-import com.jk.projectp.service.ResponseCode;
 import com.jk.projectp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,7 +29,7 @@ public class FeedbackController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/createFeedback")
     @ResponseBody
     public BaseResult<String> createFeedback(@RequestBody String msg, HttpServletRequest request) {
@@ -45,7 +45,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.CREATING_FB_ERROR);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/createComment")
     @ResponseBody
     public BaseResult<String> createComment(@RequestBody CommentRequest data, HttpServletRequest request) {
@@ -66,7 +66,7 @@ public class FeedbackController {
             return new BaseResult<>(ResponseCode.CREATING_COMMENT_ERROR);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/fetchFeedback")
     @ResponseBody
     public BaseResult<FeedbackResponse> fetchFeedback(HttpServletRequest request) {
@@ -80,7 +80,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/fetchComment")
     @ResponseBody
     public BaseResult<FeedbackCommentResponse> fetchComment(@RequestBody Long fbId, HttpServletRequest request) {
@@ -96,7 +96,7 @@ public class FeedbackController {
     }
 
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/editFeedback")
     @ResponseBody
     public BaseResult<String> editFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -117,7 +117,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/editComment")
     @ResponseBody
     public BaseResult<String> editComment(@RequestBody CommentRequest data, HttpServletRequest request){
@@ -139,7 +139,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/deleteFeedback")
     @ResponseBody
     public BaseResult<String> deleteFeedback(@RequestBody Long fbId, HttpServletRequest request) {
@@ -158,7 +158,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/deleteComment")
     @ResponseBody
     public BaseResult<String> deleteComment(@RequestBody Integer commentId, HttpServletRequest request){
