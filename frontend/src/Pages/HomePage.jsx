@@ -1,18 +1,15 @@
 import React, {useState} from 'react';
 import TemplatePage from "./TemplatePage";
-import postRequest from "../Request/PostRequest";
-import MD5 from "crypto-js/md5";
 import getRequest from "../Request/GetRequest";
 
 function HomePage() {
     const [data, setData] = useState(null);
     if (data == null) {
-        postRequest("user/login", {
-            username: "test",
-            password: MD5("123456").toString()
-        }).then()
         getRequest("user/getInfo")
             .then((res) => {
+                if (res.code !== 200) {
+                    window.location.replace("/login")
+                }
                 setData(res.data)
             })
     }

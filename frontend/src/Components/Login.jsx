@@ -1,51 +1,54 @@
-import {config} from "../Config";
-import React from "react";
-import {md5} from "hash-wasm";
-
+import React, {useState} from "react";
+import "./Login.css"
+import {Button} from "antd";
+import {ExclamationCircleOutlined, LoginOutlined} from "@ant-design/icons";
+import postRequest from "../Request/PostRequest";
+import MD5 from "crypto-js/md5";
 
 const Login = () => {
+    const [error, setError] = useState(0);
+    const [errorMsg, setErrorMsg] = useState("");
     const usernameI = React.createRef();
     const passwordI = React.createRef();
-    let encodedPassword;
+
     return (
-        <div>
-            <h1>Login</h1>
-            <form>
-                <label>
-                    Username:
-                    <input ref={usernameI} type="text"/>
-                </label>
-                <label>
-                    Password:
-                    <input ref={passwordI} type="password"/>
-                </label>
-                <button type="button" onClick={async () => {
-                    console.log(111);
-                    await md5(passwordI.current.value).then(res => {
-                        encodedPassword = res;
-                        console.log(res);
-                    });
-                    const requestOptions = {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            'username': usernameI.current.value.toString(),
-                            'password': encodedPassword
-                        })
-                    };
-                    console.log(" sending request1");
-                    fetch(config.userApiUrl + "login", requestOptions, {withCredentials: true}).then(response => response.json()).then(data => {
-                        const {code, msg} = data;
-                        console.log("raw data: " + JSON.stringify(data));
+        <div className="d-flex flex-column" style={{height: "100%"}}>
+            <div style={{margin: "auto"}}><h1 style={{color: "white"}}>Login</h1></div>
+            <form style={{height: "65%"}}>
+                <input className="loginInputBox" placeholder="Username" ref={usernameI} type="text"/>
+                <input className="loginInputBox" placeholder="Password" inputMode="password" ref={passwordI} type="password"/>
+                <br />
+                <div className="loginErrorMessage">
+                    {error===1 && <ExclamationCircleOutlined />}
+                    <div className="m-1" style={{display: "inline-block", verticalAlign: "middle"}}> {errorMsg} </div>
+                </div>
+                <br />
+                <Button type="primary"  size="large" icon={<LoginOutlined />} shape="round" className="loginFormButton" onClick={async () => {
+                    if (usernameI.current.value.toString() === "" || passwordI.current.value.toString() === "") {
+                        setError(1)
+                        setErrorMsg("Username or Password is Empty")
+                        return
+                    }
+                    setError(0)
+                    setErrorMsg("")
+                    postRequest("user/login", {
+                        'username': usernameI.current.value.toString(),
+                        'password': MD5(passwordI.current.value).toString()
+                    }).then(res => {
+                        const {code, msg} = res;
                         if (code === 200) {
-                            alert(" login success");
-                            // navigate('/index', {replace: false});
+                            window.location.replace("/home")
                         } else {
-                            alert("Error: " + msg);
+                            setError(1)
+                            setErrorMsg(msg)
+                            if (code === undefined || code == null) {
+                                setErrorMsg("Server Error")
+                            }
                         }
                     })
-                }}>Login
-                </button>
+                }}>
+                    Login
+                </Button>
             </form>
         </div>
     );
