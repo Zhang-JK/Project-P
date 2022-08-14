@@ -15,7 +15,7 @@ class CommentEntity {
 }
 
 const compareComment = function (a, b) {
-    return a.time - b.time
+    return a.id - b.id
 };
 
 class CommentNode {
@@ -30,29 +30,31 @@ class CommentNode {
 }
 
 const CommentDOM = (node) => {
-    console.log("CommentDom", node)
     if (node === undefined){
         return null
     }
     let children = [];
-    while (node.node.queue.size() > 0) {
-        let child = node.node.queue.dequeue();
-        let dom = CommentDOM({node:child});
+    let childNodes = node.node.queue.toArray()
+    for (let i = 0; i < childNodes.length; i++) {
+        let dom = CommentDOM({node:childNodes[i]});
         children.push(dom);
     }
-    let finalcomment = <><Comment
+    console.log("CommentDom", node)
+    console.log("Children:", children)
+    let finalcomment = <Comment
         actions={[<span key="comment-nested-reply-to">Reply to</span>]}
         author={<a>{node.node.comment.fromUid}</a>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
         content={
             <p>
-                {node.node.comment.content}
+                {node.node.comment.id}
             </p>
         }
     >
         {children}
-    </Comment></>;
-    console.log(finalcomment);
+        {/*<Comment content={<p>test</p>}/>*/}
+    </Comment>;
+    console.log("return", finalcomment);
     return finalcomment
 }
 
@@ -93,6 +95,7 @@ class CommentTree extends React.Component {
             let commentNode = this.root.queue.dequeue()
             comments.push(commentNode)
         }
+        console.log("root Comments:", comments)
         return (
             <List
                 className="comment-list"

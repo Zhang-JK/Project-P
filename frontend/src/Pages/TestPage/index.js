@@ -6,7 +6,7 @@ const TestPage = () => {
         "      {\n" +
         "        \"id\": 11,\n" +
         "        \"fbId\": 5,\n" +
-        "        \"content\": \"111\",\n" +
+        "        \"content\": \"11\",\n" +
         "        \"parentId\": -1,\n" +
         "        \"fromUid\": 4,\n" +
         "        \"time\": \"2022-08-07T14:39:57Z\"\n" +
@@ -14,7 +14,7 @@ const TestPage = () => {
         "      {\n" +
         "        \"id\": 12,\n" +
         "        \"fbId\": 5,\n" +
-        "        \"content\": \"11122222\",\n" +
+        "        \"content\": \"12\",\n" +
         "        \"parentId\": -1,\n" +
         "        \"fromUid\": 4,\n" +
         "        \"time\": \"2022-08-07T15:32:32Z\"\n" +
