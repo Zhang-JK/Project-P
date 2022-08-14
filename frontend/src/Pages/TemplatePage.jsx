@@ -24,7 +24,7 @@ class TemplatePage extends React.Component<> {
                     <Header style={{padding: 0}}/>
                     <Content className="site-layout-background" style={{ margin: '16px 16px', }} >
                         <div style={{ padding: 24, minHeight: 360}}>
-                            Bill is a cat.
+                            {this.props.children}
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', }} >

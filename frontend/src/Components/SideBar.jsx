@@ -35,7 +35,6 @@ class SideBar extends React.Component<> {
 
             this.props.projects == null || this.props.projects.length === 0 ? null :
                 this.props.projects.map(p => {
-                    console.log(p)
                     return getItem(p['project']['name'], p['project']['name'], <TeamOutlined/>, [
                         getItem('Dashboard', `${p['project']['name']}-D`),
                         getItem('Announcement', `${p['project']['name']}-A`),
@@ -48,7 +47,6 @@ class SideBar extends React.Component<> {
             this.props.permissions == null || this.props.permissions['feedback'] == null ? null :
                 getItem('Feedback', 'feedback', <AlertOutlined/>),
         ].flat();
-        console.log(this.props.projects)
         return (
             <Menu theme="dark" defaultSelectedKeys={this.props.selected} mode="inline" items={items}/>
         );
