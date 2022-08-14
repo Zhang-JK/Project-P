@@ -1,4 +1,4 @@
-import CommentTree from "../../Components/Comments";
+import CommentTree from "../Components/Comment";
 import {Comment} from "antd";
 
 const TestPage = () => {
