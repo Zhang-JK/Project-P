@@ -28,7 +28,7 @@ class TemplatePage extends React.Component<> {
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', }} >
-                        HKUST RoboMaster Manage System ©2018 Created by RM2022
+                        HKUST RoboMaster Manage System ©2022 Created by RM2022
                     </Footer>
                 </Layout>
             </Layout>

@@ -6,6 +6,10 @@ function HomePage() {
     const [data, setData] = useState(null);
     if (data == null) {
         getRequest("user/getInfo")
+            .catch(error => {
+                console.log('ERROR: ', error)
+                window.location.replace("/login")
+            })
             .then((res) => {
                 if (res.code !== 200) {
                     window.location.replace("/login")
