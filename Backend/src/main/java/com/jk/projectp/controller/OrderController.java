@@ -1,11 +1,10 @@
 package com.jk.projectp.controller;
 
-import com.jk.projectp.dao.OrderDAO;
 import com.jk.projectp.model.Order;
 import com.jk.projectp.model.User;
 import com.jk.projectp.result.BaseResult;
 import com.jk.projectp.service.OrderService;
-import com.jk.projectp.service.ResponseCode;
+import com.jk.projectp.result.ResponseCode;
 import com.jk.projectp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class OrderController {
@@ -25,7 +23,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/createOrder")
     @ResponseBody
     public BaseResult<String> createOrder(@RequestBody Order requestOrder, HttpServletRequest request) {
@@ -38,7 +36,7 @@ public class OrderController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/updateOrder")
     @ResponseBody
     public BaseResult<String> updateOrder(@RequestBody Order requestOrder, HttpServletRequest request) {

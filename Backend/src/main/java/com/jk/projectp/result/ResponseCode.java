@@ -1,8 +1,9 @@
-package com.jk.projectp.service;
+package com.jk.projectp.result;
 
 public enum ResponseCode {
 
     SUCCESS(200, "Success"),
+    PERMISSION_DENY(300, "Permission deny"),
     LIMIT_EXCEED(400, "Limit exceed max"),
     LOGIN_USER_NOT_EXIST(1001, "User not exist"),
     LOGIN_WRONG_PASSWORD(1002, "Wrong password"),
@@ -12,7 +13,6 @@ public enum ResponseCode {
     CREATING_FB_ERROR(1010, "Error in creating feedback!"),
     FB_NOT_EXIST(1011, "Feedback not exist!"),
     CREATING_COMMENT_ERROR(1012, "Error in creating comment!"),
-
     COMMENT_NOT_EXIST(1013, "Comment not exist!"),
     ;
 

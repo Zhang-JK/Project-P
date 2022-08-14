@@ -1,7 +1,5 @@
 package com.jk.projectp.result;
 
-import com.jk.projectp.service.ResponseCode;
-
 public class BaseResult<T> {
     private final int code;
     private final String msg;
