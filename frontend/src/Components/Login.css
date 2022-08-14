@@ -1,0 +1,45 @@
+.loginInputBox {
+    border-color: #ffffff80;
+    border-style: solid;
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 2px;
+    border-left-width: 0;
+    background-color: #00000000;
+    width: 80%;
+    max-width: 220px;
+    height: 10%;
+    margin-bottom: 20px;
+}
+
+.loginInputBox::placeholder {
+    color: #ffffff80;
+}
+
+input:focus {
+    outline:none;
+    border-color: #ffffffE0;
+}
+
+.loginFormButton {
+    background-color: #eff7ff50;
+    outline: none;
+    border: none;
+}
+
+.loginFormButton:hover {
+    background-color: rgba(64, 159, 255, 0.31);
+    outline: none;
+    border: none;
+}
+
+.loginFormButton:focus {
+    background-color: #eff7ff50;
+    outline: none;
+    border: none;
+}
+
+.loginErrorMessage {
+    color: #f34d36e0;
+    font-weight: bold;
+}
