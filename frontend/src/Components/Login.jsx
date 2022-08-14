@@ -34,6 +34,10 @@ const Login = () => {
                     postRequest("user/login", {
                         'username': usernameI.current.value.toString(),
                         'password': MD5(passwordI.current.value).toString()
+                    }).catch(error => {
+                        console.log('ERROR: ', error)
+                        setError(1)
+                        setErrorMsg("Network Fail or Server Fail")
                     }).then(res => {
                         const {code, msg} = res;
                         if (code === 200) {
