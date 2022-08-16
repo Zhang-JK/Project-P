@@ -1,6 +1,11 @@
-import {Avatar, Comment, List} from "antd";
+import {Avatar, Button, Comment, List, Form} from "antd";
+import {CommentOutlined} from "@ant-design/icons"
 import {PriorityQueue} from "@datastructures-js/priority-queue"
-import React from "react";
+import React, {useState} from "react";
+import TextArea from "antd/es/input/TextArea";
+import postRequest from "../Request/PostRequest";
+
+let sendingComment = false;
 
 class CommentEntity {
     constructor(id, fbId, content, parentId, fromUid, time) {
@@ -29,33 +34,78 @@ class CommentNode {
     }
 }
 
+const Editor = ({onChange, onSubmit, submitting, value}) => (
+    <>
+        <Form.Item>
+            <TextArea rows={4} onChange={onChange} value={value}/>
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
+                Comment
+            </Button>
+        </Form.Item>
+    </>
+);
+
+const submitComment = (fbId, commentId, value, setLoading) => {
+    console.log("Sending comment : fbId", fbId, "commentId", commentId, "value", value)
+    if (!sendingComment) {
+        sendingComment = true;
+        postRequest("createComment", {fbId: fbId, msg: value, commentId: commentId}).then(result => {
+            if (result.code === 200) {
+                alert("create meg success!")
+                setLoading(true)
+                sendingComment = false;
+                //refresh page here
+            } else {
+                sendingComment = false;
+                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
+            }
+        })
+    }
+}
+const reverseState = (state, setState) => setState(!state)
 const CommentDOM = (node) => {
-    if (node === undefined){
+    const [replyValue, setReplayValue] = useState("");
+    const [reply, setReply] = useState(false)
+    const [edit, setEdit] = useState(false)
+    if (node === undefined) {
         return null
     }
+    let fbId = node.fbId
     let children = [];
     let childNodes = node.node.queue.toArray()
     for (let i = 0; i < childNodes.length; i++) {
-        let dom = CommentDOM({node:childNodes[i]});
+        let dom = CommentDOM({node: childNodes[i], fbId: fbId});
         children.push(dom);
     }
-    console.log("CommentDom", node)
-    console.log("Children:", children)
-    let finalcomment = <Comment
-        actions={[<span key="comment-nested-reply-to">Reply to</span>]}
+
+    let finalComment = <Comment
+        actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"} icon={<CommentOutlined/>}>{"Reply"}</Button>]}
         author={<a>{node.node.comment.fromUid}</a>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
         content={
-            <p>
-                {node.node.comment.id}
-            </p>
+            <div>
+                <p>
+                    {node.node.comment.id}<br/>
+                    {node.node.comment.content}
+                </p>
+            </div>
         }
+        datetime={node.node.comment.time}
     >
+        <div style={reply ? undefined : {maxHeight: "0px", overflow: "hidden"}}>
+            <Editor
+                // className={styles.replyEditor}
+                value={replyValue}
+                onSubmit={submitComment.bind(null, fbId, node.node.comment.id, replyValue, node.setLoading)}
+                onChange={(e) => setReplayValue(e.target.value)}
+            />
+        </div>
         {children}
         {/*<Comment content={<p>test</p>}/>*/}
     </Comment>;
-    console.log("return", finalcomment);
-    return finalcomment
+    return finalComment
 }
 
 
@@ -64,9 +114,13 @@ const compareCommentUsingId = (a, b) => {
 }
 
 class CommentTree extends React.Component {
+
     constructor(props) {
         super(props)
         let {comments} = this.props
+        this.setLoading = this.props.setLoading
+        console.log("props: ", comments)
+        this.fbId = this.props.fbId
         this.root = new CommentNode(null);
         let commentNodes = []
         for (let i = 0; i < comments.length; i++) {
@@ -95,7 +149,6 @@ class CommentTree extends React.Component {
             let commentNode = this.root.queue.dequeue()
             comments.push(commentNode)
         }
-        console.log("root Comments:", comments)
         return (
             <List
                 className="comment-list"
@@ -106,6 +159,8 @@ class CommentTree extends React.Component {
                     <li>
                         <CommentDOM
                             node={item}
+                            fbId={this.fbId}
+                            setLoading={this.setLoading}
                         />
                     </li>
                 )}
