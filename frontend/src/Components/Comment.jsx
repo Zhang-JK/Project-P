@@ -1,11 +1,13 @@
 import {Avatar, Button, Comment, List, Form} from "antd";
-import {CommentOutlined} from "@ant-design/icons"
+import {CommentOutlined, EditOutlined, DeleteOutlined} from "@ant-design/icons"
 import {PriorityQueue} from "@datastructures-js/priority-queue"
 import React, {useState} from "react";
 import TextArea from "antd/es/input/TextArea";
 import postRequest from "../Request/PostRequest";
 
 let sendingComment = false;
+let editingComment = false;
+let deletingComment = false;
 
 class CommentEntity {
     constructor(id, fbId, content, parentId, fromUid, time) {
@@ -34,14 +36,14 @@ class CommentNode {
     }
 }
 
-const Editor = ({onChange, onSubmit, submitting, value}) => (
+const Editor = ({onChange, onSubmit, submitting, value, submitText}) => (
     <>
         <Form.Item>
             <TextArea rows={4} onChange={onChange} value={value}/>
         </Form.Item>
         <Form.Item>
             <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-                Comment
+                {submitText}
             </Button>
         </Form.Item>
     </>
@@ -64,9 +66,44 @@ const submitComment = (fbId, commentId, value, setLoading) => {
         })
     }
 }
+const editComment = (commentId, value, setLoading) => {
+    console.log("Sending Editing comment :", "commentId", commentId, "value", value)
+    if (!editingComment) {
+        editingComment = true;
+        postRequest("editComment", {msg: value, commentId: commentId}).then(result => {
+            if (result.code === 200) {
+                alert("edit comment success!")
+                setLoading(true)
+                editingComment = false;
+                //refresh page here
+            } else {
+                editingComment = false;
+                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
+            }
+        })
+    }
+}
+const deleteComment = (commentId, setLoading) => {
+    console.log("Sending delete comment :", "commentId", commentId)
+    if (!deletingComment) {
+        deletingComment = true;
+        postRequest("deleteComment", {commentId: commentId}).then(result => {
+            if (result.code === 200) {
+                alert("delete comment success!")
+                setLoading(true)
+                deletingComment = false;
+                //refresh page here
+            } else {
+                deletingComment = false;
+                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
+            }
+        })
+    }
+}
 const reverseState = (state, setState) => setState(!state)
 const CommentDOM = (node) => {
     const [replyValue, setReplayValue] = useState("");
+    const [editValue, setEditValue] = useState(node.node.comment.content);
     const [reply, setReply] = useState(false)
     const [edit, setEdit] = useState(false)
     if (node === undefined) {
@@ -76,19 +113,29 @@ const CommentDOM = (node) => {
     let children = [];
     let childNodes = node.node.queue.toArray()
     for (let i = 0; i < childNodes.length; i++) {
-        let dom = CommentDOM({node: childNodes[i], fbId: fbId});
+        let dom = CommentDOM({node: childNodes[i], fbId: fbId, setLoading: node.setLoading});
         children.push(dom);
     }
 
     let finalComment = <Comment
-        actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"} icon={<CommentOutlined/>}>{"Reply"}</Button>]}
+        actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"}
+                          icon={<CommentOutlined/>}>{"Reply"}</Button>,
+            <Button onClick={reverseState.bind(undefined, edit, setEdit)} type={"link"} size={"small"}
+                    icon={<EditOutlined/>}>{"Edit"}</Button>,
+            <Button onClick={deleteComment.bind(undefined, node.node.comment.id, node.setLoading)} type={"link"} size={"small"}
+                    icon={<DeleteOutlined/>}>{"Delete"}</Button>]}
         author={<a>{node.node.comment.fromUid}</a>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
         content={
             <div>
                 <p>
-                    {node.node.comment.id}<br/>
-                    {node.node.comment.content}
+                    {edit ?
+                        <Editor
+                            value={editValue}
+                            onSubmit={editComment.bind(null, node.node.comment.id, editValue, node.setLoading)}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            submitText={"Finished"}/>
+                        : node.node.comment.content}
                 </p>
             </div>
         }
@@ -100,6 +147,7 @@ const CommentDOM = (node) => {
                 value={replyValue}
                 onSubmit={submitComment.bind(null, fbId, node.node.comment.id, replyValue, node.setLoading)}
                 onChange={(e) => setReplayValue(e.target.value)}
+                submitText={"Reply"}
             />
         </div>
         {children}
