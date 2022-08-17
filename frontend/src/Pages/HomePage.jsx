@@ -3,7 +3,7 @@ import TemplatePage from "./TemplatePage";
 import getRequest from "../Request/GetRequest";
 
 function HomePage() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(null)
     if (data == null) {
         getRequest("user/getInfo")
             .catch(error => {
