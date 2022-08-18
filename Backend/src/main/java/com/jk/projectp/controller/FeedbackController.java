@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -77,6 +78,24 @@ public class FeedbackController {
         // TODO: check permission here
         List<Feedback> result = fbService.getAllFeedback();
 
+        return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @PostMapping(value = "/api/fetchOneFeedback")
+    @ResponseBody
+    public BaseResult<FeedbackResponse> fetchOneFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        // TODO: check permission here
+        List<Feedback> result = new ArrayList<>();
+        Feedback feedbackById = fbService.getFeedbackById(data.getFbId());
+        if (feedbackById==null){
+            return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
+        }
+        result.add(feedbackById);
         return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
     }
 

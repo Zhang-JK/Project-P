@@ -4,10 +4,8 @@ import {PriorityQueue} from "@datastructures-js/priority-queue"
 import React, {useState} from "react";
 import TextArea from "antd/es/input/TextArea";
 import postRequest from "../Request/PostRequest";
+import {createComment, editComment, deleteComment, Editor, reverseState} from "../Utils/Utils";
 
-let sendingComment = false;
-let editingComment = false;
-let deletingComment = false;
 
 class CommentEntity {
     constructor(id, fbId, content, parentId, fromUid, time) {
@@ -36,95 +34,30 @@ class CommentNode {
     }
 }
 
-const Editor = ({onChange, onSubmit, submitting, value, submitText}) => (
-    <>
-        <Form.Item>
-            <TextArea rows={4} onChange={onChange} value={value}/>
-        </Form.Item>
-        <Form.Item>
-            <Button htmlType="submit" loading={submitting} onClick={onSubmit} type="primary">
-                {submitText}
-            </Button>
-        </Form.Item>
-    </>
-);
 
-const submitComment = (fbId, commentId, value, setLoading) => {
-    console.log("Sending comment : fbId", fbId, "commentId", commentId, "value", value)
-    if (!sendingComment) {
-        sendingComment = true;
-        postRequest("createComment", {fbId: fbId, msg: value, commentId: commentId}).then(result => {
-            if (result.code === 200) {
-                alert("create meg success!")
-                setLoading(true)
-                sendingComment = false;
-                //refresh page here
-            } else {
-                sendingComment = false;
-                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
-            }
-        })
-    }
-}
-const editComment = (commentId, value, setLoading) => {
-    console.log("Sending Editing comment :", "commentId", commentId, "value", value)
-    if (!editingComment) {
-        editingComment = true;
-        postRequest("editComment", {msg: value, commentId: commentId}).then(result => {
-            if (result.code === 200) {
-                alert("edit comment success!")
-                setLoading(true)
-                editingComment = false;
-                //refresh page here
-            } else {
-                editingComment = false;
-                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
-            }
-        })
-    }
-}
-const deleteComment = (commentId, setLoading) => {
-    console.log("Sending delete comment :", "commentId", commentId)
-    if (!deletingComment) {
-        deletingComment = true;
-        postRequest("deleteComment", {commentId: commentId}).then(result => {
-            if (result.code === 200) {
-                alert("delete comment success!")
-                setLoading(true)
-                deletingComment = false;
-                //refresh page here
-            } else {
-                deletingComment = false;
-                alert("Error!/nError code:" + result.code + "Error msg:" + result.msg)
-            }
-        })
-    }
-}
-const reverseState = (state, setState) => setState(!state)
-const CommentDOM = (node) => {
+
+const CommentDOM = (props) => {
     const [replyValue, setReplayValue] = useState("");
-    const [editValue, setEditValue] = useState(node.node.comment.content);
+    const [editValue, setEditValue] = useState(props.node.comment.content);
     const [reply, setReply] = useState(false)
     const [edit, setEdit] = useState(false)
-    if (node === undefined) {
-        return null
-    }
-    let fbId = node.fbId
+    let fbId = props.fbId
     let children = [];
-    let childNodes = node.node.queue.toArray()
+    let childNodes = props.node.queue.toArray()
     for (let i = 0; i < childNodes.length; i++) {
-        let dom = CommentDOM({node: childNodes[i], fbId: fbId, setLoading: node.setLoading});
+        let dom = CommentDOM({key: childNodes[i].comment.id, node: childNodes[i], fbId: fbId, setLoading: props.setLoading});
         children.push(dom);
     }
-
+    const callback = () =>{props.setLoading(true)}
     let finalComment = <Comment
+        key={props.node.comment.id+"Comment"}
         actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"}
                           icon={<CommentOutlined/>}>{"Reply"}</Button>,
             <Button onClick={reverseState.bind(undefined, edit, setEdit)} type={"link"} size={"small"}
                     icon={<EditOutlined/>}>{"Edit"}</Button>,
-            <Button onClick={deleteComment.bind(undefined, node.node.comment.id, node.setLoading)} type={"link"} size={"small"}
+            <Button onClick={deleteComment.bind(undefined, props.node.comment.id, callback)} type={"link"} size={"small"}
                     icon={<DeleteOutlined/>}>{"Delete"}</Button>]}
-        author={<a>{node.node.comment.fromUid}</a>}
+        author={<a>{props.node.comment.fromUid}</a>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
         content={
             <div>
@@ -132,20 +65,20 @@ const CommentDOM = (node) => {
                     {edit ?
                         <Editor
                             value={editValue}
-                            onSubmit={editComment.bind(null, node.node.comment.id, editValue, node.setLoading)}
+                            onSubmit={editComment.bind(null, props.node.comment.id, editValue, callback)}
                             onChange={(e) => setEditValue(e.target.value)}
                             submitText={"Finished"}/>
-                        : node.node.comment.content}
+                        : props.node.comment.content}
                 </p>
             </div>
         }
-        datetime={node.node.comment.time}
+        datetime={props.node.comment.time}
     >
         <div style={reply ? undefined : {maxHeight: "0px", overflow: "hidden"}}>
             <Editor
                 // className={styles.replyEditor}
                 value={replyValue}
-                onSubmit={submitComment.bind(null, fbId, node.node.comment.id, replyValue, node.setLoading)}
+                onSubmit={createComment.bind(null, fbId, props.node.comment.id, replyValue, callback)}
                 onChange={(e) => setReplayValue(e.target.value)}
                 submitText={"Reply"}
             />
@@ -167,7 +100,7 @@ class CommentTree extends React.Component {
         super(props)
         let {comments} = this.props
         this.setLoading = this.props.setLoading
-        console.log("props: ", comments)
+        console.log("comments: ", comments)
         this.fbId = this.props.fbId
         this.root = new CommentNode(null);
         let commentNodes = []
@@ -192,11 +125,7 @@ class CommentTree extends React.Component {
     }
 
     render() {
-        let comments = []
-        while (this.root.queue.size() > 0) {
-            let commentNode = this.root.queue.dequeue()
-            comments.push(commentNode)
-        }
+        let comments = this.root.queue.toArray()
         return (
             <List
                 className="comment-list"
@@ -206,6 +135,7 @@ class CommentTree extends React.Component {
                 renderItem={item => (
                     <li>
                         <CommentDOM
+                            key={item.comment.id}
                             node={item}
                             fbId={this.fbId}
                             setLoading={this.setLoading}
