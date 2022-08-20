@@ -1,6 +1,11 @@
-import {Avatar, Comment, List} from "antd";
+import {Avatar, Button, Comment, List, Form} from "antd";
+import {CommentOutlined, EditOutlined, DeleteOutlined} from "@ant-design/icons"
 import {PriorityQueue} from "@datastructures-js/priority-queue"
-import React from "react";
+import React, {useState} from "react";
+import TextArea from "antd/es/input/TextArea";
+import postRequest from "../Request/PostRequest";
+import {createComment, editComment, deleteComment, Editor, reverseState} from "../Utils/Utils";
+
 
 class CommentEntity {
     constructor(id, fbId, content, parentId, fromUid, time) {
@@ -29,33 +34,59 @@ class CommentNode {
     }
 }
 
-const CommentDOM = (node) => {
-    if (node === undefined){
-        return null
-    }
+
+
+const CommentDOM = (props) => {
+    const [replyValue, setReplayValue] = useState("");
+    const [editValue, setEditValue] = useState(props.node.comment.content);
+    const [reply, setReply] = useState(false)
+    const [edit, setEdit] = useState(false)
+    let fbId = props.fbId
     let children = [];
-    let childNodes = node.node.queue.toArray()
+    let childNodes = props.node.queue.toArray()
     for (let i = 0; i < childNodes.length; i++) {
-        let dom = CommentDOM({node:childNodes[i]});
+        let dom = CommentDOM({key: childNodes[i].comment.id, node: childNodes[i], fbId: fbId, setLoading: props.setLoading});
         children.push(dom);
     }
-    console.log("CommentDom", node)
-    console.log("Children:", children)
-    let finalcomment = <Comment
-        actions={[<span key="comment-nested-reply-to">Reply to</span>]}
-        author={<a>{node.node.comment.fromUid}</a>}
+    const callback = () =>{props.setLoading(true)}
+    let finalComment = <Comment
+        key={props.node.comment.id+"Comment"}
+        actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"}
+                          icon={<CommentOutlined/>}>{"Reply"}</Button>,
+            <Button onClick={reverseState.bind(undefined, edit, setEdit)} type={"link"} size={"small"}
+                    icon={<EditOutlined/>}>{"Edit"}</Button>,
+            <Button onClick={deleteComment.bind(undefined, props.node.comment.id, callback)} type={"link"} size={"small"}
+                    icon={<DeleteOutlined/>}>{"Delete"}</Button>]}
+        author={<a>{props.node.comment.fromUid}</a>}
         avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
         content={
-            <p>
-                {node.node.comment.id}
-            </p>
+            <div>
+                <p>
+                    {edit ?
+                        <Editor
+                            value={editValue}
+                            onSubmit={editComment.bind(null, props.node.comment.id, editValue, callback)}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            submitText={"Finished"}/>
+                        : props.node.comment.content}
+                </p>
+            </div>
         }
+        datetime={props.node.comment.time}
     >
+        <div style={reply ? undefined : {maxHeight: "0px", overflow: "hidden"}}>
+            <Editor
+                // className={styles.replyEditor}
+                value={replyValue}
+                onSubmit={createComment.bind(null, fbId, props.node.comment.id, replyValue, callback)}
+                onChange={(e) => setReplayValue(e.target.value)}
+                submitText={"Reply"}
+            />
+        </div>
         {children}
         {/*<Comment content={<p>test</p>}/>*/}
     </Comment>;
-    console.log("return", finalcomment);
-    return finalcomment
+    return finalComment
 }
 
 
@@ -64,9 +95,13 @@ const compareCommentUsingId = (a, b) => {
 }
 
 class CommentTree extends React.Component {
+
     constructor(props) {
         super(props)
         let {comments} = this.props
+        this.setLoading = this.props.setLoading
+        console.log("comments: ", comments)
+        this.fbId = this.props.fbId
         this.root = new CommentNode(null);
         let commentNodes = []
         for (let i = 0; i < comments.length; i++) {
@@ -90,12 +125,7 @@ class CommentTree extends React.Component {
     }
 
     render() {
-        let comments = []
-        while (this.root.queue.size() > 0) {
-            let commentNode = this.root.queue.dequeue()
-            comments.push(commentNode)
-        }
-        console.log("root Comments:", comments)
+        let comments = this.root.queue.toArray()
         return (
             <List
                 className="comment-list"
@@ -105,7 +135,10 @@ class CommentTree extends React.Component {
                 renderItem={item => (
                     <li>
                         <CommentDOM
+                            key={item.comment.id}
                             node={item}
+                            fbId={this.fbId}
+                            setLoading={this.setLoading}
                         />
                     </li>
                 )}

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,14 +33,14 @@ public class FeedbackController {
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/createFeedback")
     @ResponseBody
-    public BaseResult<String> createFeedback(@RequestBody String msg, HttpServletRequest request) {
+    public BaseResult<String> createFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         // TODO:check permission here
 
-        if (fbService.createFB(user, msg, LocalDateTime.now().toInstant(ZoneOffset.UTC))) {
+        if (fbService.createFB(user, data.getMsg(), LocalDateTime.now().toInstant(ZoneOffset.UTC))) {
             return new BaseResult<>(ResponseCode.SUCCESS);
         }
         return new BaseResult<>(ResponseCode.CREATING_FB_ERROR);
@@ -81,14 +82,32 @@ public class FeedbackController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
-    @PostMapping(value = "/api/fetchComment")
+    @PostMapping(value = "/api/fetchOneFeedback")
     @ResponseBody
-    public BaseResult<FeedbackCommentResponse> fetchComment(@RequestBody Long fbId, HttpServletRequest request) {
+    public BaseResult<FeedbackResponse> fetchOneFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
+        // TODO: check permission here
+        List<Feedback> result = new ArrayList<>();
+        Feedback feedbackById = fbService.getFeedbackById(data.getFbId());
+        if (feedbackById==null){
+            return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
+        }
+        result.add(feedbackById);
+        return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
+    }
 
+    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @PostMapping(value = "/api/fetchComment")
+    @ResponseBody
+    public BaseResult<FeedbackCommentResponse> fetchComment(@RequestBody FeedbackRequest data, HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        Long fbId = data.getFbId();
         // TODO: check permission here
         List<FeedbackComment> result = fbService.getCommentOfFeedback(fbId);
 
@@ -142,12 +161,12 @@ public class FeedbackController {
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/deleteFeedback")
     @ResponseBody
-    public BaseResult<String> deleteFeedback(@RequestBody Long fbId, HttpServletRequest request) {
+    public BaseResult<String> deleteFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
-        Feedback fb = fbService.getFeedbackById(fbId);
+        Feedback fb = fbService.getFeedbackById(data.getFbId());
         if (fb == null){
             return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
         }
@@ -161,12 +180,12 @@ public class FeedbackController {
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/deleteComment")
     @ResponseBody
-    public BaseResult<String> deleteComment(@RequestBody Integer commentId, HttpServletRequest request){
+    public BaseResult<String> deleteComment(@RequestBody CommentRequest data, HttpServletRequest request){
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
-        FeedbackComment comment = fbService.getCommentById(commentId);
+        FeedbackComment comment = fbService.getCommentById(data.getCommentId());
         if (comment == null)
         {
             return new BaseResult<>(ResponseCode.COMMENT_NOT_EXIST);
