@@ -14,27 +14,21 @@ class TemplatePage extends React.Component<> {
                     <div className="logo d-flex flex-row p-0">
                         <img style={{marginRight: 15, marginLeft: 13}} src={LogoWhite} alt={"LOGO"} height={"100%"} />
                         <div className="d-flex flex-column">
-                            <div className="m-0 p-0" style={{color: "White", fontSize: 19}}>HKUST</div>
-                            <div className="m-0 p-0" style={{color: "White", fontSize: 16}}>RoboMaster</div>
+                            <div className="m-0 p-0" style={{color: "White", fontSize: 19, fontFamily: "sans-serif"}}><b>HKUST</b></div>
+                            <div className="m-0 p-0" style={{color: "White", fontSize: 16, fontFamily: "sans-serif"}}><b>RoboMaster</b></div>
                         </div>
                     </div>
-                    <SideBar selected={'1'} />
+                    <SideBar selected={this.props.page} permissions={this.props.permissions} projects={this.props.projects} />
                 </Sider>
-                <Layout className="site-layout">
-                    <Header className="site-layout-background" style={{padding: 0,}}/>
-                    <Content style={{ margin: '0 16px', }} >
-                        <div
-                            className="site-layout-background"
-                            style={{
-                                padding: 24,
-                                minHeight: 360,
-                            }}
-                        >
-                            Bill is a cat.
+                <Layout >
+                    <Header style={{padding: 0}}/>
+                    <Content className="site-layout-background" style={{ margin: '16px 16px', }} >
+                        <div style={{ padding: 24, minHeight: 360}}>
+                            {this.props.children}
                         </div>
                     </Content>
                     <Footer style={{ textAlign: 'center', }} >
-                        Footer
+                        HKUST RoboMaster Manage System ©2022 Created by RM2022
                     </Footer>
                 </Layout>
             </Layout>

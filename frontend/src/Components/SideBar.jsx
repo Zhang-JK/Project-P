@@ -1,6 +1,15 @@
 import React from "react";
 import {Menu} from 'antd';
-import {HomeOutlined, UserSwitchOutlined, ScheduleOutlined, TeamOutlined, AccountBookOutlined, BulbOutlined, AlertOutlined, IdcardOutlined} from "@ant-design/icons";
+import {
+    HomeOutlined,
+    UserSwitchOutlined,
+    ScheduleOutlined,
+    TeamOutlined,
+    AccountBookOutlined,
+    BulbOutlined,
+    AlertOutlined,
+    IdcardOutlined
+} from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
     return {
@@ -12,24 +21,34 @@ function getItem(label, key, icon, children) {
 }
 
 class SideBar extends React.Component<> {
-    items = [
-        getItem('Home', '1', <HomeOutlined />),
-         getItem('Member Manage', '2', <UserSwitchOutlined />),
-        getItem('Project Manage', '3', <ScheduleOutlined />),
-        getItem('Finance', '4', <AccountBookOutlined />),
-        getItem('Announcement', '5', <BulbOutlined />),
-        getItem('Project', 'name', <TeamOutlined />, [
-            getItem('Announcement', 'name-1'),
-            getItem('Calendar', 'name-2'),
-            getItem('Purchase', 'name-3'),
-        ]),
-        getItem('Personal', '6', <IdcardOutlined />),
-        getItem('Feedback', '7', <AlertOutlined />),
-    ];
-
     render() {
+        const items = [
+            getItem('Home', 'home', <HomeOutlined/>),
+            this.props.permissions == null || this.props.permissions['humanResource'] == null ? null :
+                getItem('Member Manage', 'member', <UserSwitchOutlined/>),
+            this.props.permissions == null || this.props.permissions['projectManage'] == null ? null :
+                getItem('Project Manage', 'project', <ScheduleOutlined/>),
+            this.props.permissions == null || this.props.permissions['finance'] == null ? null :
+                getItem('Finance', 'finance', <AccountBookOutlined/>),
+            this.props.permissions == null || this.props.permissions['announcement'] == null ? null :
+                getItem('Announcement', 'announcement', <BulbOutlined/>),
+
+            this.props.projects == null || this.props.projects.length === 0 ? null :
+                this.props.projects.map(p => {
+                    return getItem(p['project']['name'], p['project']['name'], <TeamOutlined/>, [
+                        getItem('Dashboard', `${p['project']['name']}-D`),
+                        getItem('Announcement', `${p['project']['name']}-A`),
+                        getItem('Calendar', `${p['project']['name']}-C`),
+                        getItem('Purchase', `${p['project']['name']}-P`),
+                    ])
+                }),
+
+            getItem('Personal', 'personal', <IdcardOutlined/>),
+            this.props.permissions == null || this.props.permissions['feedback'] == null ? null :
+                getItem('Feedback', 'feedback', <AlertOutlined/>),
+        ].flat();
         return (
-            <Menu theme="dark" defaultSelectedKeys={this.props.selected} mode="inline" items={this.items}/>
+            <Menu theme="dark" defaultSelectedKeys={this.props.selected} mode="inline" items={items}/>
         );
     }
 }

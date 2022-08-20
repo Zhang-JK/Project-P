@@ -1,14 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
-// import IndexPage from "./Pages/IndexPage";
 import FeedbackCommentPage from "./Pages/FeedbackCommentPage";
+import TestPage from "./Pages/TestPage";
 import HomePage from "./Pages/HomePage";
 import FeedbackPage from "./Pages/FeedbackPage";
 
 function App() {
-    console.log("app")
     return (
         <div className="App">
             <Routes>
