@@ -105,7 +105,7 @@ public class UserService {
     public Set<MemberResponse> getAllUsersWithRole() {
         Set<MemberResponse> res = new HashSet<>();
         for (User user : userDAO.findAll()) {
-            res.add(new MemberResponse(user, user.getRoles()));
+            res.add(new MemberResponse(user, user.getRoles(), user.getUserProjects()));
         }
         return res;
     }

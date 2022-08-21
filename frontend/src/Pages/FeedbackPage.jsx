@@ -1,14 +1,13 @@
 import {Route, Routes, useParams, Link} from "react-router-dom";
 import Feedback from "../Components/Feedback";
 import {useState} from "react";
-import CommentTree from "../Components/Comment";
 import {Affix, Button, List, Modal, Skeleton} from "antd";
 import postRequest from "../Request/PostRequest";
 import React from "react";
 import FeedbackCommentPage from "./FeedbackCommentPage";
-import {createComment, createFeedback} from "../Utils/Utils";
 import TextArea from "antd/es/input/TextArea";
 import {PlusCircleOutlined} from "@ant-design/icons";
+import {createComment, createFeedback} from "../Utils/Requests";
 
 let fbDataOld = undefined;
 const setFbData = (data) => {
@@ -21,6 +20,7 @@ const Feedbacks = () => {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [feedback, setFeedback] = useState("");
+    const [title, setTitle] = useState("");
     if (loading) {
         postRequest("fetchFeedback").then(result => {
             if (result.code === 200) {
@@ -31,7 +31,6 @@ const Feedbacks = () => {
             }
         })
     }
-    console.log("fbData:", fbData)
     return (
         <div>
             <Skeleton loading={loading} active avatar>
@@ -42,18 +41,19 @@ const Feedbacks = () => {
                     dataSource={fbData}
                     renderItem={item => (
                         <li>
-                            <Link to={"" + item.id}>
-                                <Feedback maxLine={2} data={item} callback={setLoading.bind(undefined, true)}/>
-                            </Link>
+
+                            <Feedback key={item.id} maxLine={2} data={item} callback={setLoading.bind(undefined, true)}
+                                      linked={true}/>
+
                         </li>
                     )}
                 />}
             </Skeleton>
             <Modal
-                title={"Create a new comment"}
+                title={"Create a new feedback"}
                 visible={visible}
                 onOk={() => {
-                    createFeedback(feedback, () => {
+                    createFeedback(feedback, title,() => {
                         setConfirmLoading(false);
                         setVisible(false)
                         setLoading(true)
@@ -66,9 +66,12 @@ const Feedbacks = () => {
                     setVisible(false)
                 }}
             >
-                <TextArea row={4} onChange={(e) => {
+                <TextArea placeholder={"Title"} row={1} onChange={(e) => {
+                    setTitle(e.target.value)
+                }} value={title} maxLength={100}/>
+                <TextArea placeholder={"Content"} row={4} onChange={(e) => {
                     setFeedback(e.target.value)
-                }} value={feedback}/>
+                }} value={feedback} maxLength={500}/>
 
             </Modal>
             <div style={{float: "right"}}>

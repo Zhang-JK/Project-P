@@ -4,9 +4,9 @@ import postRequest from "../Request/PostRequest";
 import {useState} from "react";
 import Feedback from "../Components/Feedback";
 import {PlusCircleOutlined} from "@ant-design/icons"
-import {createComment} from "../Utils/Utils";
 import TextArea from "antd/es/input/TextArea";
 import {useParams} from "react-router-dom";
+import {createComment} from "../Utils/Requests";
 
 
 const FeedbackCommentPage = (props) => {
