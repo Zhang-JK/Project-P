@@ -4,7 +4,10 @@ import {PriorityQueue} from "@datastructures-js/priority-queue"
 import React, {useState} from "react";
 import TextArea from "antd/es/input/TextArea";
 import postRequest from "../Request/PostRequest";
-import {createComment, editComment, deleteComment, Editor, reverseState} from "../Utils/Utils";
+import {Editor, getUserDataList, getUserInfo, reverseState} from "../Utils/Utils";
+import {createComment, deleteComment, editComment} from "../Utils/Requests";
+import {InfoAvatar} from "./InfoAvatar";
+import {checkMemory, getMemory} from "../Utils/Memory";
 
 
 class CommentEntity {
@@ -35,30 +38,40 @@ class CommentNode {
 }
 
 
-
 const CommentDOM = (props) => {
     const [replyValue, setReplayValue] = useState("");
     const [editValue, setEditValue] = useState(props.node.comment.content);
     const [reply, setReply] = useState(false)
     const [edit, setEdit] = useState(false)
+    const [loadingUser, setLoadingUser] = useState(checkMemory("userDataList"))
     let fbId = props.fbId
     let children = [];
     let childNodes = props.node.queue.toArray()
     for (let i = 0; i < childNodes.length; i++) {
-        let dom = CommentDOM({key: childNodes[i].comment.id, node: childNodes[i], fbId: fbId, setLoading: props.setLoading});
+        let dom = CommentDOM({
+            key: childNodes[i].comment.id,
+            node: childNodes[i],
+            fbId: fbId,
+            setLoading: props.setLoading
+        });
         children.push(dom);
     }
-    const callback = () =>{props.setLoading(true)}
+    const callback = () => {
+        props.setLoading(true)
+    }
+    getUserDataList();
     let finalComment = <Comment
-        key={props.node.comment.id+"Comment"}
+        key={props.node.comment.id + "Comment"}
         actions={[<Button onClick={reverseState.bind(undefined, reply, setReply)} type={"link"} size={"small"}
                           icon={<CommentOutlined/>}>{"Reply"}</Button>,
             <Button onClick={reverseState.bind(undefined, edit, setEdit)} type={"link"} size={"small"}
                     icon={<EditOutlined/>}>{"Edit"}</Button>,
-            <Button onClick={deleteComment.bind(undefined, props.node.comment.id, callback)} type={"link"} size={"small"}
+            <Button onClick={deleteComment.bind(undefined, props.node.comment.id, callback)} type={"link"}
+                    size={"small"}
                     icon={<DeleteOutlined/>}>{"Delete"}</Button>]}
-        author={<a>{props.node.comment.fromUid}</a>}
-        avatar={<Avatar src="https://joeschmoe.io/api/v1/random" alt="Han Solo"/>}
+        author={
+            <a>{!loadingUser && getUserInfo(props.node.comment.fromUid, setLoadingUser.bind(undefined, false)).user.username}</a>}
+        avatar={<InfoAvatar userId={props.node.comment.fromUid}/>}
         content={
             <div>
                 <p>

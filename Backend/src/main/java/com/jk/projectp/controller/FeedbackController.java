@@ -40,7 +40,7 @@ public class FeedbackController {
         }
         // TODO:check permission here
 
-        if (fbService.createFB(user, data.getMsg(), LocalDateTime.now().toInstant(ZoneOffset.UTC))) {
+        if (fbService.createFB(user, data.getMsg(), LocalDateTime.now().toInstant(ZoneOffset.UTC), data.getTitle())) {
             return new BaseResult<>(ResponseCode.SUCCESS);
         }
         return new BaseResult<>(ResponseCode.CREATING_FB_ERROR);
@@ -92,7 +92,7 @@ public class FeedbackController {
         // TODO: check permission here
         List<Feedback> result = new ArrayList<>();
         Feedback feedbackById = fbService.getFeedbackById(data.getFbId());
-        if (feedbackById==null){
+        if (feedbackById == null) {
             return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
         }
         result.add(feedbackById);
@@ -124,32 +124,45 @@ public class FeedbackController {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         Feedback fb = fbService.getFeedbackById(data.getFbId());
-        if (fb == null){
+        if (fb == null) {
             return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
         }
-        if (!Objects.equals(fb.getFromUid().getId(), user.getId())){ // If not the publisher
+        if (!Objects.equals(fb.getFromUid().getId(), user.getId())) { // If not the publisher
             // TODO: check permission here
         }
-        fb.setContent(data.getMsg());
-        fb.setTime(LocalDateTime.now().toInstant(ZoneOffset.UTC));
-        fbService.saveFeedback(fb);
+        boolean changed = false;
+        if (data.getTitle() != null) {
+            fb.setTitle(data.getTitle());
+            changed = true;
+        }
+        if (data.getMsg() != null) {
+            fb.setContent(data.getMsg());
+            changed = true;
+        }
+        if (data.getStatus() != null) {
+            fb.setStatus(data.getStatus());
+            changed = true;
+        }
+        if (changed) {
+            fb.setTime(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+            fbService.saveFeedback(fb);
+        }
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/editComment")
     @ResponseBody
-    public BaseResult<String> editComment(@RequestBody CommentRequest data, HttpServletRequest request){
+    public BaseResult<String> editComment(@RequestBody CommentRequest data, HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         FeedbackComment comment = fbService.getCommentById(data.getCommentId());
-        if (comment == null)
-        {
+        if (comment == null) {
             return new BaseResult<>(ResponseCode.COMMENT_NOT_EXIST);
         }
-        if (!Objects.equals(comment.getFromUid().getId(), user.getId())){ // If not the publisher
+        if (!Objects.equals(comment.getFromUid().getId(), user.getId())) { // If not the publisher
             // TODO: check permission here
         }
         comment.setContent(data.getMsg());
@@ -167,10 +180,10 @@ public class FeedbackController {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         Feedback fb = fbService.getFeedbackById(data.getFbId());
-        if (fb == null){
+        if (fb == null) {
             return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
         }
-        if (!Objects.equals(fb.getFromUid().getId(), user.getId())){ // If not the publisher
+        if (!Objects.equals(fb.getFromUid().getId(), user.getId())) { // If not the publisher
             // TODO: check permission here
         }
         fbService.deleteFeedback(fb);
@@ -180,17 +193,16 @@ public class FeedbackController {
     @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
     @PostMapping(value = "/api/deleteComment")
     @ResponseBody
-    public BaseResult<String> deleteComment(@RequestBody CommentRequest data, HttpServletRequest request){
+    public BaseResult<String> deleteComment(@RequestBody CommentRequest data, HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         FeedbackComment comment = fbService.getCommentById(data.getCommentId());
-        if (comment == null)
-        {
+        if (comment == null) {
             return new BaseResult<>(ResponseCode.COMMENT_NOT_EXIST);
         }
-        if (!Objects.equals(comment.getFromUid().getId(), user.getId())){ // If not the publisher
+        if (!Objects.equals(comment.getFromUid().getId(), user.getId())) { // If not the publisher
             // TODO: check permission here
         }
         fbService.deleteComment(comment);

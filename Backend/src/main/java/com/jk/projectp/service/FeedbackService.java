@@ -21,8 +21,8 @@ public class FeedbackService {
     @Autowired
     CommentMessageFeedbackDAO commentDAO;
 
-    public boolean createFB(User user, String msg, Instant time) {
-        Feedback fb = new Feedback(msg, user, time);
+    public boolean createFB(User user, String msg, Instant time, String title) {
+        Feedback fb = new Feedback(msg, user, time, title);
         fbDAO.save(fb);
         return true;
     }

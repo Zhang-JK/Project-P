@@ -29,10 +29,22 @@ public class Feedback {
     @Column(name = "time", nullable = false)
     private Instant time;
 
-    public Feedback(String msg, User user, Instant time) {
+    @Column(name = "title", nullable = false, length = 100)
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Feedback(String msg, User user, Instant time, String title) {
         this.content = msg;
         this.fromUid = user;
         this.time = time;
+        this.title = title;
         this.status = FeedbackStatus.STARTED;
     }
 
