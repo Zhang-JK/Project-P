@@ -50,7 +50,7 @@ const FeedbackCommentPage = (props) => {
         <div>
             <h1>Hello FeedbackCommentPage</h1>
             <Skeleton loading={loadingFb} active avatar>
-                {!loadingFb && <Feedback data={fbData} callback={setLoadingFb.bind(undefined, true)}/>}
+                {!loadingFb && <Feedback showCommentDialog={setVisible.bind(undefined, true)} data={fbData} callback={setLoadingFb.bind(undefined, true)}/>}
             </Skeleton>
             <Skeleton loading={loading} active avatar>
                 {!loading && <CommentTree comments={data.fbCommentList} fbId={fbId} setLoading={setLoading}/>}

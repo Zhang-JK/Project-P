@@ -44,7 +44,7 @@ const Feedbacks = () => {
 
                             <Feedback key={item.id} maxLine={2} data={item} callback={setLoading.bind(undefined, true)}
                                       linked={true}/>
-
+                            <br/>
                         </li>
                     )}
                 />}

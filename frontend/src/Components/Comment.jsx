@@ -4,7 +4,7 @@ import {PriorityQueue} from "@datastructures-js/priority-queue"
 import React, {useState} from "react";
 import TextArea from "antd/es/input/TextArea";
 import postRequest from "../Request/PostRequest";
-import {Editor, getUserDataList, getUserInfo, reverseState} from "../Utils/Utils";
+import {Editor, getUserDataList, getUserInfo, getUserName, reverseState} from "../Utils/Utils";
 import {createComment, deleteComment, editComment} from "../Utils/Requests";
 import {InfoAvatar} from "./InfoAvatar";
 import {checkMemory, getMemory} from "../Utils/Memory";
@@ -70,7 +70,7 @@ const CommentDOM = (props) => {
                     size={"small"}
                     icon={<DeleteOutlined/>}>{"Delete"}</Button>]}
         author={
-            <a>{!loadingUser && getUserInfo(props.node.comment.fromUid, setLoadingUser.bind(undefined, false)).user.username}</a>}
+            <a>{getUserName(props.node.comment.fromUid, setLoadingUser.bind(undefined, false))}</a>}
         avatar={<InfoAvatar userId={props.node.comment.fromUid}/>}
         content={
             <div>
