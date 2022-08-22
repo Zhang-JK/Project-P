@@ -69,3 +69,10 @@ export const getUserInfo = (id, callback, failedCallback) => {
         return userDataList[id];
     }
 }
+
+export const getUserName = (id, callback, failedCallback) => {
+    let userDataList = getUserDataList(callback, failedCallback);
+    if (userDataList !== undefined) {
+        return userDataList[id].user.username;
+    }
+}

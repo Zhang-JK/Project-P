@@ -51,7 +51,7 @@ export const InfoAvatar = (props) => {
             } trigger={"hover"}>
                 {<Avatar size={size}
                     style={{backgroundColor: avatarColorArray[data.user.id % avatarColorArray.length]}}>{getCapital(data.user.name)}</Avatar>}
-                <a>{data.user.username}</a>
+                {/*<a>{data.user.username}</a>*/}
             </Popover>}
         </div>
     )
