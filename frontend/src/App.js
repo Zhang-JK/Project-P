@@ -1,11 +1,11 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
 import LoginPage from "./Pages/LoginPage";
-import FeedbackCommentPage from "./Pages/FeedbackCommentPage";
 import HomePage from "./Pages/HomePage";
 import FeedbackPage from "./Pages/FeedbackPage";
 import {TestPage} from "./Pages/TestPage";
 import UserManagePage from "./Pages/UserManagePage";
+import RegisterPage from "./Pages/RegisterPage";
 
 function App() {
     return (
@@ -17,6 +17,7 @@ function App() {
                 <Route path="/login" element={<LoginPage />}/>
                 <Route path="/test" element={<TestPage/>}/>
                 <Route path="/feedback/*" element={<FeedbackPage/>}/>
+                <Route path="/register" element={<RegisterPage/>}/>
             </Routes>
         </div>
     );
