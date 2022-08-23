@@ -30,7 +30,7 @@ public class FeedbackController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/createFeedback")
     @ResponseBody
     public BaseResult<String> createFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -46,7 +46,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.CREATING_FB_ERROR);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/createComment")
     @ResponseBody
     public BaseResult<String> createComment(@RequestBody CommentRequest data, HttpServletRequest request) {
@@ -67,7 +67,7 @@ public class FeedbackController {
             return new BaseResult<>(ResponseCode.CREATING_COMMENT_ERROR);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fetchFeedback")
     @ResponseBody
     public BaseResult<FeedbackResponse> fetchFeedback(HttpServletRequest request) {
@@ -81,7 +81,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fetchOneFeedback")
     @ResponseBody
     public BaseResult<FeedbackResponse> fetchOneFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -99,7 +99,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS, new FeedbackResponse(result));
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fetchComment")
     @ResponseBody
     public BaseResult<FeedbackCommentResponse> fetchComment(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -115,7 +115,7 @@ public class FeedbackController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/editFeedback")
     @ResponseBody
     public BaseResult<String> editFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -150,7 +150,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/editComment")
     @ResponseBody
     public BaseResult<String> editComment(@RequestBody CommentRequest data, HttpServletRequest request) {
@@ -171,7 +171,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/deleteFeedback")
     @ResponseBody
     public BaseResult<String> deleteFeedback(@RequestBody FeedbackRequest data, HttpServletRequest request) {
@@ -190,7 +190,7 @@ public class FeedbackController {
         return new BaseResult<>(ResponseCode.SUCCESS);
     }
 
-    @CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
     @PostMapping(value = "/api/deleteComment")
     @ResponseBody
     public BaseResult<String> deleteComment(@RequestBody CommentRequest data, HttpServletRequest request) {
