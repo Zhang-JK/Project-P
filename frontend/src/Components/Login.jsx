@@ -15,7 +15,8 @@ const Login = () => {
         <div className="d-flex flex-column" style={{height: "100%"}}>
             <div style={{margin: "auto"}}><h1 style={{color: "white"}}>Login</h1></div>
             <form style={{height: "65%"}}>
-                <input className="loginInputBox" placeholder="Username" ref={usernameI} type="text"/>
+                <input className="loginInputBox" placeholder="ITSC Account" ref={usernameI} type="text"/>
+                <br />
                 <input className="loginInputBox" placeholder="Password" inputMode="password" ref={passwordI} type="password"/>
                 <br />
                 <div className="loginErrorMessage">

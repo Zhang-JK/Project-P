@@ -127,7 +127,7 @@ class RegisterPage extends React.Component<> {
                                     <Option value="SOFTWARE">Software</Option>
                                     <Option value="HARDWARE">Hardware</Option>
                                     <Option value="MECHANICAL">Mechanical</Option>
-                                    <Option value="LOGISTICS">Logistics</Option>
+                                    <Option value="LOGISTICS">Design & Media</Option>
                                     <Option value="WEBSITE">Website</Option>
                                 </Select>
                             </Form.Item>
