@@ -1,5 +1,8 @@
 package com.jk.projectp.model;
 
+import com.jk.projectp.utils.dataenum.Gender;
+import com.jk.projectp.utils.dataenum.Grade;
+
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.LinkedHashSet;
@@ -23,13 +26,15 @@ public class Fresh {
     private String nickName;
 
     @Column(name = "gender", nullable = false, length = 10)
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "itsc", nullable = false, length = 50)
     private String itsc;
 
     @Column(name = "grade", nullable = false, length = 10)
-    private String grade;
+    @Enumerated(EnumType.STRING)
+    private Grade grade;
 
     @Column(name = "major", length = 50)
     private String major;
@@ -42,6 +47,18 @@ public class Fresh {
 
     @OneToMany(mappedBy = "fresh")
     private Set<FreshPosition> freshPositions = new LinkedHashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;
@@ -75,13 +92,6 @@ public class Fresh {
         this.nickName = nickName;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getItsc() {
         return itsc;
@@ -91,11 +101,19 @@ public class Fresh {
         this.itsc = itsc;
     }
 
-    public String getGrade() {
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Grade getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(Grade grade) {
         this.grade = grade;
     }
 
