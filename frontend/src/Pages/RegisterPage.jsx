@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Form, Input, Select } from 'antd';
+import {Alert, Button, Form, Input, Select} from 'antd';
+import {RightCircleOutlined} from "@ant-design/icons";
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -21,7 +22,25 @@ class RegisterPage extends React.Component<> {
     render() {
         return (
             <div className="d-flex flex-column justify-content-center">
-                <div className={"justify-content-center"} style={{maxWidth: "100%", width: 1200}}>
+                <h1 className={"m-4"}>HKUST RoboMaster Team Recruitment 2023</h1>
+                <Alert
+                    style={{maxWidth: "95%", width: 1200}}
+                    message="Welcome, Please complete this form to register"
+                    type="success"
+                    className={"m-2"}
+                />
+                <Alert
+                    style={{maxWidth: "95%", width: 1200}}
+                    message={
+                        <div className="d-flex flex-row justify-content-center">
+                            <div className="m-1">If you have completed this form, please click the button and redirect to the manage system (Recommended to use computer to access)</div>
+                            <Button onClick={() => window.location.replace("/home")} style={{marginTop: "auto", marginBottom: "auto"}} type="primary" shape="circle" icon={<RightCircleOutlined />} />
+                        </div>
+                    }
+                    type="info"
+                    className={"m-2"}
+                />
+                <div className={"justify-content-center m-2"} style={{maxWidth: "95%", width: 1200}}>
                     <Form style={{width: "100%"}} labelCol={{span: 4}} wrapperCol={{span: 14}} onFinish={this.onFinish}>
                         <Form.Item name={"name"} label={"Name"} rules={[{required: true, message: "please enter your name"}]}>
                             <Input placeholder="Your name" />
