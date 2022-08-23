@@ -32,7 +32,7 @@ public class FreshController {
 
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fresh/create")
     @ResponseBody
     public BaseResult<String> createFresh(@RequestBody FreshRequest data) {
