@@ -1,18 +1,15 @@
 package com.jk.projectp.service;
 
-import cn.hutool.core.lang.Pair;
 import com.jk.projectp.dao.FreshDAO;
-import com.jk.projectp.dao.FreshPositionDAO;
+import com.jk.projectp.dao.PositionDAO;
 import com.jk.projectp.model.Fresh;
-import com.jk.projectp.model.FreshPosition;
-import com.jk.projectp.utils.SetOperation;
-import com.jk.projectp.utils.dataenum.Position;
+import com.jk.projectp.model.Position;
+import com.jk.projectp.model.Role;
+import com.jk.projectp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,7 +18,7 @@ public class FreshService {
     private FreshDAO freshDAO;
 
     @Autowired
-    private FreshPositionDAO freshPositionDAO;
+    private PositionDAO positionDAO;
 
     public boolean createFresh(Fresh fresh) {
         if (freshDAO.findByItsc(fresh.getItsc()) != null)
@@ -30,12 +27,13 @@ public class FreshService {
         return true;
     }
 
-    public void setPositions(Fresh fresh, Set<Position> positions){
-        Set<FreshPosition> newPositions = new HashSet<>();
-        for (Position position:positions){
-            newPositions.add(new FreshPosition(position, fresh));
+    public void setPositions(Fresh fresh, Set<String> positions){
+        Set<Position> posSet = new HashSet<>();
+        for (String pos : positions) {
+            Position p = positionDAO.findByName(pos);
+            if (p != null)
+                posSet.add(p);
         }
-        fresh.setFreshPositions(newPositions);
-        freshDAO.save(fresh);
+        fresh.setPositions(posSet);
     }
 }

@@ -2,7 +2,6 @@ package com.jk.projectp.request;
 
 import com.jk.projectp.utils.dataenum.Gender;
 import com.jk.projectp.utils.dataenum.Grade;
-import com.jk.projectp.utils.dataenum.Position;
 
 import java.util.Set;
 
@@ -17,17 +16,17 @@ public class FreshRequest {
     String info;
     String password;
 
-    Set<Position> positions;
+    Set<String> positions;
 
-    public Set<Position> getPositions() {
+    public Set<String> getPositions() {
         return positions;
     }
 
-    public void setPositions(Set<Position> positions) {
+    public void setPositions(Set<String> positions) {
         this.positions = positions;
     }
 
-    public FreshRequest(String name, String chineseName, String nickName, Gender gender, String itsc, Grade grade, String major, String info, String password, Set<Position> positions) {
+    public FreshRequest(String name, String chineseName, String nickName, Gender gender, String itsc, Grade grade, String major, String info, String password, Set<String> positions) {
         this.name = name;
         this.chineseName = chineseName;
         this.nickName = nickName;

@@ -127,12 +127,15 @@ public class UserService {
         return userDAO.save(user);
     }
 
-    public User createUser(String username, String password, String email, String name) {
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setName(name);
-        updatePassword(user, password);
+    public User saveUser(String username, String password, String email, String name) {
+        User user = userDAO.findByUsername(username);
+        if (userDAO.findByUsername(username) == null) {
+            user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setName(name);
+            updatePassword(user, password);
+        }
         return user;
     }
 

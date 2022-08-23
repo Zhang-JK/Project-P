@@ -45,12 +45,23 @@ public class Fresh {
     @Column(name = "register_time")
     private Instant registerTime;
 
-    @OneToMany(mappedBy = "fresh")
-    private Set<FreshPosition> freshPositions = new LinkedHashSet<>();
-
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @ManyToMany
+    @JoinTable(name = "fresh_position",
+            joinColumns = @JoinColumn(name = "fresh_id"),
+            inverseJoinColumns = @JoinColumn(name = "position_id"))
+    private Set<Position> positions = new LinkedHashSet<>();
+
+    public Set<Position> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(Set<Position> positions) {
+        this.positions = positions;
+    }
 
     public User getUser() {
         return user;
@@ -140,13 +151,4 @@ public class Fresh {
     public void setRegisterTime(Instant registerTime) {
         this.registerTime = registerTime;
     }
-
-    public Set<FreshPosition> getFreshPositions() {
-        return freshPositions;
-    }
-
-    public void setFreshPositions(Set<FreshPosition> freshPositions) {
-        this.freshPositions = freshPositions;
-    }
-
 }
