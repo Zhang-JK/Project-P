@@ -3,7 +3,7 @@ package com.jk.projectp.utils.dataenum;
 public enum Gender {
     MALE("MALE"),
     FEMALE("FEMALE"),
-    NOT_TO_TELL("NO");
+    NOT_TELL("NOT_TELL");
     private String genderString;
 
     Gender(String genderString){
