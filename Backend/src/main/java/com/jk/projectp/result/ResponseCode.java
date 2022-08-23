@@ -14,6 +14,10 @@ public enum ResponseCode {
     FB_NOT_EXIST(1011, "Feedback not exist!"),
     CREATING_COMMENT_ERROR(1012, "Error in creating comment!"),
     COMMENT_NOT_EXIST(1013, "Comment not exist!"),
+    INSUFFICIENT_INFO(1014, "Lack non-nullable information"),
+    ITSC_FORMAT_WRONG(1015, "Itsc email format is wrong!"),
+    ITSC_ALREADY_EXIST(1016, "This itsc has already registered!"),
+    FRESH_POSITION_NOT_SELECTED(1017, "Fresh positions not selected!"),
     ;
 
     private final int code;
