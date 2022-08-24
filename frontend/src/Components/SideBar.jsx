@@ -8,7 +8,7 @@ import {
     AccountBookOutlined,
     BulbOutlined,
     AlertOutlined,
-    IdcardOutlined
+    IdcardOutlined, LogoutOutlined
 } from "@ant-design/icons";
 
 function getItem(label, key, icon, children) {
@@ -25,7 +25,10 @@ class SideBar extends React.Component<> {
         const items = [
             getItem('Home', 'home', <HomeOutlined/>),
             this.props.permissions == null || this.props.permissions['humanResource'] == null ? null :
-                getItem('Member Manage', 'member', <UserSwitchOutlined/>),
+                getItem('Member Manage', 'memberM', <UserSwitchOutlined/>, [
+                    getItem('All Users', `member`),
+                    getItem('Fresh Member', `fresh`),
+                ]),
             this.props.permissions == null || this.props.permissions['projectManage'] == null ? null :
                 getItem('Project Manage', 'project', <ScheduleOutlined/>),
             this.props.permissions == null || this.props.permissions['finance'] == null ? null :
@@ -46,9 +49,20 @@ class SideBar extends React.Component<> {
             getItem('Personal', 'personal', <IdcardOutlined/>),
             this.props.permissions == null || this.props.permissions['feedback'] == null ? null :
                 getItem('Feedback', 'feedback', <AlertOutlined/>),
+            getItem('Logout', 'logout', <LogoutOutlined />),
         ].flat();
+
         return (
-            <Menu theme="dark" defaultSelectedKeys={this.props.selected} mode="inline" items={items}/>
+            <Menu theme="dark" defaultOpenKeys={['memberM']} defaultSelectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
+                console.log(i)
+                switch (i.key) {
+                    case ('logout'):
+                        window.location.replace(`/login`)
+                        break;
+                    default:
+                        window.location.replace(`/${i.key}`)
+                }
+            }}/>
         );
     }
 }

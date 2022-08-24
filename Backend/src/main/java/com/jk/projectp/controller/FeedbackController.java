@@ -40,7 +40,7 @@ public class FeedbackController {
         }
         // TODO:check permission here
 
-        if (fbService.createFB(user, data.getMsg(), LocalDateTime.now().toInstant(ZoneOffset.UTC), data.getTitle())) {
+        if (fbService.createFB(user, data.getMsg(), LocalDateTime.now().toInstant(ZoneOffset.of("+8")), data.getTitle())) {
             return new BaseResult<>(ResponseCode.SUCCESS);
         }
         return new BaseResult<>(ResponseCode.CREATING_FB_ERROR);
@@ -61,7 +61,7 @@ public class FeedbackController {
         if (fb == null) {
             return new BaseResult<>(ResponseCode.FB_NOT_EXIST);
         }
-        if (fbService.createComment(user, data.getMsg(), data.getCommentId(), fb, LocalDateTime.now().toInstant(ZoneOffset.UTC)))
+        if (fbService.createComment(user, data.getMsg(), data.getCommentId(), fb, LocalDateTime.now().toInstant(ZoneOffset.of("+8"))))
             return new BaseResult<>(ResponseCode.SUCCESS);
         else
             return new BaseResult<>(ResponseCode.CREATING_COMMENT_ERROR);
@@ -144,7 +144,7 @@ public class FeedbackController {
             changed = true;
         }
         if (changed) {
-            fb.setTime(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+            fb.setTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
             fbService.saveFeedback(fb);
         }
         return new BaseResult<>(ResponseCode.SUCCESS);
@@ -166,7 +166,7 @@ public class FeedbackController {
             // TODO: check permission here
         }
         comment.setContent(data.getMsg());
-        comment.setTime(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+        comment.setTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
         fbService.saveComment(comment);
         return new BaseResult<>(ResponseCode.SUCCESS);
     }

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import TemplatePage from "./TemplatePage";
 import getRequest from "../Request/GetRequest";
+import UserTable from "../Components/UserTable";
 
 function UserManagePage() {
     const [data, setData] = useState(null)
@@ -34,9 +35,9 @@ function UserManagePage() {
     return (
         <TemplatePage page={"member"} permissions={data == null ? null : data.permissions}
                       projects={data == null ? null : data.projects}>
-            {data != null &&
+            {users != null &&
                 <div className="d-flex flex-column">
-                    
+                    <UserTable data={users} />
                 </div>
             }
         </TemplatePage>

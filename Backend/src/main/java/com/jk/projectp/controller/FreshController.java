@@ -66,7 +66,7 @@ public class FreshController {
         fresh.setGrade(data.getGrade());
         fresh.setMajor(data.getMajor());
         fresh.setInfo(data.getInfo());
-        fresh.setRegisterTime(LocalDateTime.now().toInstant(ZoneOffset.UTC));
+        fresh.setRegisterTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
         freshService.setPositions(fresh, data.getPositions());
         fresh.setUser(user);
         userService.setRoles(user, new HashSet<String>(List.of("Fresh")));
