@@ -4,22 +4,25 @@ import com.jk.projectp.model.Fresh;
 import com.jk.projectp.model.User;
 import com.jk.projectp.request.FreshRequest;
 import com.jk.projectp.result.BaseResult;
+import com.jk.projectp.result.FreshListResult;
 import com.jk.projectp.result.ResponseCode;
 import com.jk.projectp.service.FreshService;
+import com.jk.projectp.service.RoleService;
 import com.jk.projectp.service.UserService;
+import com.jk.projectp.utils.dataenum.WebPages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Controller
 public class FreshController {
@@ -29,6 +32,24 @@ public class FreshController {
 
     @Autowired
     FreshService freshService;
+
+    @Autowired
+    RoleService roleService;
+
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @GetMapping(value = "/api/fresh/list")
+    @ResponseBody
+    public BaseResult<Set<FreshListResult>> listFresh(HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, false)) {
+            return new BaseResult<>(ResponseCode.SUCCESS, freshService.getAll().stream().map(FreshListResult::new).collect(Collectors.toSet()));
+        }
+        return new BaseResult<>(ResponseCode.PERMISSION_DENY);
+    }
 
 
 

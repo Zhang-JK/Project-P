@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Form, Input, Select, Space, Table, Tag} from 'antd';
-import RoleToColor from "../Utils/RoleToColor";
+import {RoleToColor} from "../Utils/RoleToColor";
 const { Option } = Select;
 
 const {Column} = Table;
@@ -30,7 +30,7 @@ class UserTable extends React.Component<> {
     }
 
     filterRes(users, filter) {
-        if (users == null) return null
+        if (users == null || filter == null) return null
         let f = users
         if (filter.name != null && filter.name!== "")
             f = f.filter(i => i.name.indexOf(filter.name) !== -1)
@@ -63,7 +63,11 @@ class UserTable extends React.Component<> {
         })
         this.setState({
             userData: u,
-            filterData: this.filterRes(u)
+            filterData: this.filterRes(u, {
+                name: "",
+                email: "",
+                role: []
+            })
         })
     }
 

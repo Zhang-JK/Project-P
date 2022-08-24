@@ -1,4 +1,4 @@
-function RoleToColor(role) {
+export function RoleToColor(role) {
     switch (role){
         case "Captain":
             return "magenta"
@@ -22,4 +22,18 @@ function RoleToColor(role) {
     }
 }
 
-export default RoleToColor
+export function PositionToColor(p) {
+    switch (p){
+        case "SOFTWARE":
+            return "magenta"
+        case "HARDWARE":
+            return "volcano"
+        case "MECHANICAL":
+            return "cyan"
+        case "LOGISTICS":
+            return "green"
+        case "WEBSITE":
+        default:
+            return "lime"
+    }
+}

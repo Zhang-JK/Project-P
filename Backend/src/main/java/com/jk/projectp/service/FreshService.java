@@ -4,12 +4,11 @@ import com.jk.projectp.dao.FreshDAO;
 import com.jk.projectp.dao.PositionDAO;
 import com.jk.projectp.model.Fresh;
 import com.jk.projectp.model.Position;
-import com.jk.projectp.model.Role;
-import com.jk.projectp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -19,6 +18,10 @@ public class FreshService {
 
     @Autowired
     private PositionDAO positionDAO;
+
+    public List<Fresh> getAll() {
+        return freshDAO.findAll();
+    }
 
     public boolean createFresh(Fresh fresh) {
         if (freshDAO.findByItsc(fresh.getItsc()) != null)
