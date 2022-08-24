@@ -1,6 +1,7 @@
 import React from "react";
-import {Button, Form, Input, Select, Space, Table, Tag} from 'antd';
+import {Alert, Button, Form, Input, Modal, Select, Space, Table, Tag} from 'antd';
 import {RoleToColor} from "../Utils/RoleToColor";
+import getRequest from "../Request/GetRequest";
 const { Option } = Select;
 
 const {Column} = Table;
@@ -25,7 +26,10 @@ class UserTable extends React.Component<> {
                 name: "",
                 email: "",
                 role: []
-            })
+            }),
+            deleteState: 0,
+            deleteId: 0,
+            errorMsg: ""
         }
     }
 
@@ -81,6 +85,17 @@ class UserTable extends React.Component<> {
         })
     }
 
+    handleDelete = (r) => {
+        getRequest(`humanResource/deleteOne?id=${r.id}`).then(r => {
+            if (r.code !== 200)
+                this.setState({deleteId: 0, errorMsg: r.msg, deleteState: -1})
+            else {
+                this.setState({deleteId: 0, errorMsg: r.msg, deleteState: 0})
+                this.props.reload()
+            }
+        })
+    }
+
     render() {
         return (
             <div className="d-flex flex-column" style={{width: "100%"}}>
@@ -114,6 +129,7 @@ class UserTable extends React.Component<> {
                         </Form.Item>
                     </Form>
                 </div>
+                {this.state.deleteState < 0 && <Alert type="error" message="Error text" banner style={{marginBottom: 20}}/>}
                 <Table dataSource={this.state.filterData}>
                     <Column fixed="left" title="ID" dataIndex="id" key="id" defaultSortOrder="ascend" sorter={{compare: (a, b) => a.id - b.id, multiple: 1}}/>
                     <Column fixed="left" title="Name" dataIndex="name" key="name"/>
@@ -129,9 +145,18 @@ class UserTable extends React.Component<> {
                                 (<Space>{tags.map((tag) =>
                                     (<Tag key={tag}>{tag}</Tag>)
                                 )}</Space>)}/>
-                    <Column fixed="right" title="Action" key="action" render={(_) => (<Space size="middle">
+                    <Column fixed="right" title="Action" key="action" render={(record) => (<Space size="middle">
                         <Button size="small" type="primary">Edit</Button>
-                        <Button size="small" type="primary" danger>Delete</Button>
+                        <Button size="small" type="primary" danger onClick={() => {
+                            this.setState({deleteState: 1, deleteId: record.id})
+                        }}>Delete</Button>
+                        <Modal title="Basic Modal" visible={this.state.deleteState && this.state.deleteId === record.id} onOk={() => this.handleDelete(record)} onCancel={() => this.setState({deleteState: 0, deleteId: 0})}>
+                            <p>ARE YOU SURE to delete user "{record.username}" ({record.name})? </p>
+                            <p><strong>This action is NOT invertible!</strong></p>
+                            {record.roles.length > 0 && <p>Roles: {record.roles.toString()}</p>}
+                            {record.projects.length > 0 && <p><strong>He/She have joined some projects, it is NOT recommend to do so!</strong></p>}
+                            {record.projects.length > 0 && <p>Projects: {record.projects.toString()}</p>}
+                        </Modal>
                     </Space>)}
                     />
                 </Table>

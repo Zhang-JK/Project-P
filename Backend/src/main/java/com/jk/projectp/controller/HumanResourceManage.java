@@ -65,6 +65,25 @@ public class HumanResourceManage {
     }
 
     @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @GetMapping(value = "/api/humanResource/deleteOne")
+    @ResponseBody
+    public BaseResult<Set<Integer>> deleteOne(@RequestParam Integer id, HttpServletRequest request) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, true)) {
+            Set<Integer> result = new HashSet<>();
+                User targetUser = userService.getById(id);
+                if (!Objects.equals(id, user.getId()) && targetUser != null && targetUser.getRoles().stream().noneMatch(r -> r.getId() == 1) && userService.deleteUser(id)) {
+                    result.add(id);
+                }
+            return new BaseResult<>(ResponseCode.SUCCESS, result);
+        }
+        return new BaseResult<>(ResponseCode.PERMISSION_DENY);
+    }
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
     @PostMapping(value = "/api/humanResource/update")
     @ResponseBody
     public BaseResult<UserUpdateResponse> update(@RequestBody Set<User> updateUsers, HttpServletRequest request) {

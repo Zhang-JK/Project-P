@@ -37,7 +37,7 @@ function UserManagePage() {
                       projects={data == null ? null : data.projects}>
             {users != null &&
                 <div className="d-flex flex-column">
-                    <UserTable data={users} />
+                    <UserTable data={users} reload={() => setUsers(null)} />
                 </div>
             }
         </TemplatePage>
