@@ -59,16 +59,15 @@ class RegisterPage extends React.Component<> {
             )
         else
             return (
-                <div className="d-flex flex-column justify-content-center">
+                <div className="d-flex flex-column justify-content-center" style={{width: "100%"}}>
                     <h1 className={"m-4"}>HKUST RoboMaster Team Recruitment 2023</h1>
                     <Alert
-                        style={{maxWidth: "95%", width: 1200}}
+                        style={{maxWidth: "95%", width: 1200, marginLeft: "auto", marginRight: "auto", marginBottom: 20}}
                         message="Welcome, Please complete this form to register"
                         type="success"
-                        className={"m-2"}
                     />
                     <Alert
-                        style={{maxWidth: "95%", width: 1200}}
+                        style={{maxWidth: "95%", width: 1200, marginLeft: "auto", marginRight: "auto", marginBottom: 20}}
                         message={
                             <div className="d-flex flex-row justify-content-center">
                                 <div className="m-1">If you have completed this form, please click the button and redirect to the manage system (Recommended to use computer to access)</div>
@@ -76,10 +75,9 @@ class RegisterPage extends React.Component<> {
                             </div>
                         }
                         type="info"
-                        className={"m-2"}
                     />
-                    <div className={"justify-content-center m-2"} style={{maxWidth: "95%", width: 1200}}>
-                        <Form style={{width: "100%"}} labelCol={{span: 4}} wrapperCol={{span: 14}} onFinish={this.onFinish}>
+                    <div className={"justify-content-center"} style={{maxWidth: "95%", width: 1200, marginLeft: "auto", marginRight: "auto", marginTop: 10}}>
+                        <Form style={{width: "100%"}} labelCol={{span: 4, offset: 2}} wrapperCol={{span: 14}} onFinish={this.onFinish}>
                             <Form.Item name={"name"} label={"Name"} rules={[{required: true, message: "please enter your name"}, {max: 50, type: "string", message: "Too long, max 50"}]}>
                                 <Input placeholder="Your name" />
                             </Form.Item>
@@ -135,7 +133,18 @@ class RegisterPage extends React.Component<> {
                                 <TextArea rows={4} placeholder="Tell us more about you, limited to 500 characters" />
                             </Form.Item>
                             <Form.Item name={"password"} label={"Set Password"} rules={[{required: true, message: "please set your password"}, {min: 6, type: "string", message: "at least 6 characters"}]}>
-                                <Input type="password" placeholder="This will be the password for you to login our system" />
+                                <Input.Password placeholder="This will be the password for you to login our system" />
+                            </Form.Item>
+                            <Form.Item name="confirm" label={"Confirm Password"} dependencies={['password']}
+                                       rules={[{required: true, message: "please set your password"}, ({ getFieldValue }) => ({
+                                           validator(_, value) {
+                                               if (!value || getFieldValue('password') === value) {
+                                                   return Promise.resolve();
+                                               }
+                                               return Promise.reject(new Error('the two passwords that you entered do not match'));
+                                           },
+                                       })]}>
+                                <Input.Password placeholder="please enter your password again" />
                             </Form.Item>
                             <Form.Item >
                                 {this.state.stage !== 1  &&

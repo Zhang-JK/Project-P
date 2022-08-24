@@ -24,7 +24,7 @@ const Login = () => {
                     <div className="m-1" style={{display: "inline-block", verticalAlign: "middle"}}> {errorMsg} </div>
                 </div>
                 <br />
-                <Button type="primary"  size="large" icon={<LoginOutlined />} shape="round" className="loginFormButton" onClick={async () => {
+                <Button type="primary" icon={<LoginOutlined style={{marginBottom: 3}} />} size="large" shape="round" className="loginFormButton" onClick={async () => {
                     if (usernameI.current.value.toString() === "" || passwordI.current.value.toString() === "") {
                         setError(1)
                         setErrorMsg("Username or Password is Empty")
@@ -52,7 +52,7 @@ const Login = () => {
                         }
                     })
                 }}>
-                    Login
+                    <span>Login</span>
                 </Button>
             </form>
         </div>
