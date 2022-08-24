@@ -8,6 +8,8 @@ import FeedbackCommentPage from "./FeedbackCommentPage";
 import TextArea from "antd/es/input/TextArea";
 import {PlusCircleOutlined} from "@ant-design/icons";
 import {createComment, createFeedback} from "../Utils/Requests";
+import TemplatePage from "./TemplatePage";
+import getRequest from "../Request/GetRequest";
 
 let fbDataOld = undefined;
 const setFbData = (data) => {
@@ -15,13 +17,27 @@ const setFbData = (data) => {
 }
 const Feedbacks = () => {
     setFbData(undefined);
+    const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
     const [fbData, setFbDataS] = useState(undefined)
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [feedback, setFeedback] = useState("");
     const [title, setTitle] = useState("");
-    if (loading) {
+    if (data == null) {
+        getRequest("user/getInfo")
+            .catch(error => {
+                console.log('ERROR: ', error)
+                window.location.replace("/login")
+            })
+            .then((res) => {
+                if (res.code !== 200) {
+                    window.location.replace("/login")
+                }
+                setData(res.data)
+            })
+    }
+    if (loading && data != null) {
         postRequest("fetchFeedback").then(result => {
             if (result.code === 200) {
                 setFbDataS(result.data.fbPojoList);
@@ -33,6 +49,8 @@ const Feedbacks = () => {
     }
     return (
         <div>
+            <TemplatePage page={"feedback"} permissions={data == null ? null : data.permissions}
+                          projects={data == null ? null : data.projects}>
             <Skeleton loading={loading} active avatar>
                 {!loading && <List
                     className="feedback-list"
@@ -41,7 +59,6 @@ const Feedbacks = () => {
                     dataSource={fbData}
                     renderItem={item => (
                         <li>
-
                             <Feedback key={item.id} maxLine={2} data={item} callback={setLoading.bind(undefined, true)}
                                       linked={true}/>
                             <br/>
@@ -83,6 +100,7 @@ const Feedbacks = () => {
                     />
                 </Affix>
             </div>
+            </TemplatePage>
         </div>
     )
 }
