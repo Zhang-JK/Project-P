@@ -10,13 +10,10 @@ import {createComment} from "../Utils/Requests";
 
 
 const FeedbackCommentPage = (props) => {
-    const {fbId} = useParams();
-    let {fbDataOld} = props
-    if (fbDataOld&&fbDataOld.id !== fbId){
-        fbDataOld = undefined;
-    }
+    const {fbId} = props;
+    let fbDataOld = undefined
     let [loading, setLoading] = useState(true)
-    let [loadingFb, setLoadingFb] = useState(fbDataOld === undefined)
+    let [loadingFb, setLoadingFb] = useState(true)
     let [data, setData] = useState(undefined)
     let [fbData, setFbData] = useState(fbDataOld)
     const [visible, setVisible] = useState(false);
@@ -50,7 +47,8 @@ const FeedbackCommentPage = (props) => {
         <div>
             <h1>Hello FeedbackCommentPage</h1>
             <Skeleton loading={loadingFb} active avatar>
-                {!loadingFb && <Feedback showCommentDialog={setVisible.bind(undefined, true)} data={fbData} callback={setLoadingFb.bind(undefined, true)}/>}
+                {!loadingFb && <Feedback showCommentDialog={setVisible.bind(undefined, true)} data={fbData}
+                                         callback={setLoadingFb.bind(undefined, true)}/>}
             </Skeleton>
             <Skeleton loading={loading} active avatar>
                 {!loading && <CommentTree comments={data.fbCommentList} fbId={fbId} setLoading={setLoading}/>}
@@ -77,7 +75,7 @@ const FeedbackCommentPage = (props) => {
                 }} value={comment}/>
 
             </Modal>
-            <div style={{float:"right"}}>
+            <div style={{float: "right"}}>
                 <Affix offsetBottom={100}>
                     <Button style={{background: "grey"}} icon={<PlusCircleOutlined/>} size={"large"} ghost
                             onClick={() => {

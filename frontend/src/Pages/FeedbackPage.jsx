@@ -1,4 +1,4 @@
-import {Route, Routes, useParams, Link} from "react-router-dom";
+import {Route, Routes, useParams, Link, useLocation} from "react-router-dom";
 import Feedback from "../Components/Feedback";
 import {useState} from "react";
 import {Affix, Button, List, Modal, Skeleton} from "antd";
@@ -15,7 +15,7 @@ let fbDataOld = undefined;
 const setFbData = (data) => {
     fbDataOld = data
 }
-const Feedbacks = () => {
+export const Feedbacks = () => {
     setFbData(undefined);
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -49,8 +49,6 @@ const Feedbacks = () => {
     }
     return (
         <div>
-            <TemplatePage page={"feedback"} permissions={data == null ? null : data.permissions}
-                          projects={data == null ? null : data.projects}>
             <Skeleton loading={loading} active avatar>
                 {!loading && <List
                     className="feedback-list"
@@ -100,20 +98,16 @@ const Feedbacks = () => {
                     />
                 </Affix>
             </div>
-            </TemplatePage>
         </div>
     )
 }
 
 const FeedbackPage = (props) => {
-    return (
-        <div>
-            <Routes>
-                <Route path={""} element={<Feedbacks/>}/>
-                <Route path={":fbId"} element={<FeedbackCommentPage fbDataOld={fbDataOld}/>}/>
-            </Routes>
-        </div>
-    )
+    const {arg} = props;
+    if (arg===undefined||arg===""){
+        return (<Feedbacks/>)
+    } else
+        return <FeedbackCommentPage fbId={Number.parseInt(arg)}/>
 };
 
 export default FeedbackPage;

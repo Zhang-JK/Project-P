@@ -33,14 +33,10 @@ function FreshManagePage() {
     }
 
     return (
-        <TemplatePage page={"fresh"} permissions={data == null ? null : data.permissions}
-                      projects={data == null ? null : data.projects}>
-            {fresh != null &&
-                <div className="d-flex flex-column">
-                    <FreshTable data={fresh} />
-                </div>
-            }
-        </TemplatePage>
+        fresh != null &&
+        <div className="d-flex flex-column">
+            <FreshTable data={fresh}/>
+        </div>
     )
 }
 

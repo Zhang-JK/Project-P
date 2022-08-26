@@ -1,10 +1,10 @@
 import ClampLines from "react-clamp-lines";
 import {Button, Card} from "antd";
 import {DeleteOutlined, EditOutlined, CommentOutlined} from "@ant-design/icons";
-import {reverseState, Editor, getUserInfo, getUserName} from "../Utils/Utils";
+import {reverseState, Editor, getUserInfo, getUserName, navigateWithoutRefresh} from "../Utils/Utils";
 import React, {useState} from "react";
 import {deleteFeedback, editFeedback} from "../Utils/Requests";
-import {Link} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import {InfoAvatar} from "./InfoAvatar";
 import {FeedbackStatus} from "./FeedbackStatus";
 import TextArea from "antd/es/input/TextArea";
@@ -48,9 +48,9 @@ const Feedback = (props) => {
                     <Meta
                         avatar={<InfoAvatar userId={data.fromUid}
                                             size={"large"}/>}
-                        title={<strong style={{float:"left"}}>{getUserName(data.fromUid,
+                        title={<strong style={{float: "left"}}>{getUserName(data.fromUid,
                             setLoadingUser.bind(undefined, false))}</strong>}
-                        description={<small style={{margin:"auto"}}>{data.time}</small>}/>
+                        description={<small style={{margin: "auto"}}>{data.time}</small>}/>
                     {edit ? <Editor
                             value={editValue}
                             onSubmit={editFeedback.bind(undefined, data.id, editValue, title, undefined, () => {
@@ -61,7 +61,9 @@ const Feedback = (props) => {
                             submitText={"Submit"}
                         /> :
                         (linked ?
-                            <Link to={"" + data.id}>
+                            <div onClick={() => {
+                                navigateWithoutRefresh("/home/feedback/" + data.id)
+                            }}>
                                 <div style={{
                                     maxWidth: '100%',
                                     display: '-webkit-box',
@@ -70,7 +72,7 @@ const Feedback = (props) => {
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                 }}>{data.content}</div>
-                            </Link> : <div style={{
+                            </div> : <div style={{
                                 maxWidth: '100%',
                                 display: '-webkit-box',
                                 WebkitBoxOrient: 'vertical',

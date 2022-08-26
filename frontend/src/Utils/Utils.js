@@ -3,6 +3,7 @@ import TextArea from "antd/es/input/TextArea";
 import React from "react";
 import getRequest from "../Request/GetRequest";
 import {checkMemory, getMemory, setMemory} from "./Memory";
+import {useLocation} from "react-router-dom";
 
 export const Editor = ({onChange, onSubmit, submitting, value, submitText}) => (
     <>
@@ -74,5 +75,22 @@ export const getUserName = (id, callback, failedCallback) => {
     let userDataList = getUserDataList(callback, failedCallback);
     if (userDataList !== undefined) {
         return userDataList[id].user.username;
+    }
+}
+let navigateCallbackArray = []
+export const navigateWithoutRefresh = (link) => {
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    window.history.pushState(null, null, link)
+    // window.history.replaceState()
+    // window.history.push(link)
+    console.log(navigateCallbackArray);
+    for (const callbackKey in navigateCallbackArray) {
+        navigateCallbackArray[callbackKey](window.location.pathname);
+    }
+}
+export const addNavigateCallback = (callback) => {
+    if (callback instanceof Function && !navigateCallbackArray.includes(callback)){
+        navigateCallbackArray.push(callback);
     }
 }
