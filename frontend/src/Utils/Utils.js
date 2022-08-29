@@ -78,19 +78,30 @@ export const getUserName = (id, callback, failedCallback) => {
     }
 }
 let navigateCallbackArray = []
-export const navigateWithoutRefresh = (link) => {
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    window.history.pushState(null, null, link)
-    // window.history.replaceState()
-    // window.history.push(link)
+function navigateCallbacks() {
     console.log(navigateCallbackArray);
     for (const callbackKey in navigateCallbackArray) {
         navigateCallbackArray[callbackKey](window.location.pathname);
     }
 }
+
+export const navigateWithoutRefresh = (link) => {
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    window.history.pushState(null, null, link)
+    // window.history.replaceState()
+    navigateCallbacks();
+}
 export const addNavigateCallback = (callback) => {
-    if (callback instanceof Function && !navigateCallbackArray.includes(callback)){
+    if (callback instanceof Function && !navigateCallbackArray.includes(callback)) {
         navigateCallbackArray.push(callback);
     }
 }
+window.addEventListener('hashchange', function () {
+    navigateCallbacks();
+});
+
+window.addEventListener('popstate', function () {
+    navigateCallbacks();
+});
