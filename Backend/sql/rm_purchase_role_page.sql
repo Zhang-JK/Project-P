@@ -1,0 +1,12 @@
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (1, 1, 'PROJECT_MANAGE', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (2, 2, 'PROJECT_MANAGE', 0);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (3, 2, 'HUMAN_RESOURCE', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (4, 1, 'HUMAN_RESOURCE', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (5, 3, 'HUMAN_RESOURCE', 0);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (6, 4, 'HUMAN_RESOURCE', 0);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (7, 1, 'FEEDBACK', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (8, 2, 'FEEDBACK', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (9, 3, 'FEEDBACK', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (10, 4, 'FEEDBACK', 1);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (11, 5, 'FEEDBACK', 0);
+INSERT INTO role_page (id, role_id, page, allow_modify) VALUES (12, 9, 'FEEDBACK', 0);

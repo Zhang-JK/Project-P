@@ -15,7 +15,8 @@ const Login = () => {
         <div className="d-flex flex-column" style={{height: "100%"}}>
             <div style={{margin: "auto"}}><h1 style={{color: "white"}}>Login</h1></div>
             <form style={{height: "65%"}}>
-                <input className="loginInputBox" placeholder="Username" ref={usernameI} type="text"/>
+                <input className="loginInputBox" placeholder="ITSC Account" ref={usernameI} type="text"/>
+                <br />
                 <input className="loginInputBox" placeholder="Password" inputMode="password" ref={passwordI} type="password"/>
                 <br />
                 <div className="loginErrorMessage">
@@ -23,7 +24,7 @@ const Login = () => {
                     <div className="m-1" style={{display: "inline-block", verticalAlign: "middle"}}> {errorMsg} </div>
                 </div>
                 <br />
-                <Button type="primary"  size="large" icon={<LoginOutlined />} shape="round" className="loginFormButton" onClick={async () => {
+                <Button type="primary" icon={<LoginOutlined style={{marginBottom: 3}} />} size="large" shape="round" className="loginFormButton" onClick={async () => {
                     if (usernameI.current.value.toString() === "" || passwordI.current.value.toString() === "") {
                         setError(1)
                         setErrorMsg("Username or Password is Empty")
@@ -51,7 +52,7 @@ const Login = () => {
                         }
                     })
                 }}>
-                    Login
+                    <span>Login</span>
                 </Button>
             </form>
         </div>

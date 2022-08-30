@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import TemplatePage from "./TemplatePage";
 import getRequest from "../Request/GetRequest";
-import UserTable from "../Components/UserTable";
+import FreshTable from "../Components/FreshTable";
 
-function UserManagePage() {
+function FreshManagePage() {
     const [data, setData] = useState(null)
-    const [users, setUsers] = useState(null)
+    const [fresh, setFresh] = useState(null)
     if (data == null) {
         getRequest("user/getInfo")
             .catch(error => {
@@ -19,8 +19,8 @@ function UserManagePage() {
                 setData(res.data)
             })
     }
-    if (data != null && data.permissions['humanResource'] !== undefined && users == null) {
-        getRequest("humanResource/list")
+    if (data != null && data.permissions['humanResource'] !== undefined && fresh == null) {
+        getRequest("fresh/list")
             .catch(error => {
                 console.log('ERROR: ', error)
             })
@@ -28,16 +28,16 @@ function UserManagePage() {
                 if (res.code === 1003) {
                     window.location.replace("/login")
                 }
-                setUsers(res.data)
+                setFresh(res.data)
             })
     }
 
     return (
-        users != null &&
+        fresh != null &&
         <div className="d-flex flex-column">
-            <UserTable data={users} reload={() => setUsers(null)}/>
+            <FreshTable data={fresh}/>
         </div>
     )
 }
 
-export default UserManagePage
+export default FreshManagePage

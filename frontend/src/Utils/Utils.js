@@ -3,6 +3,7 @@ import TextArea from "antd/es/input/TextArea";
 import React from "react";
 import getRequest from "../Request/GetRequest";
 import {checkMemory, getMemory, setMemory} from "./Memory";
+import {useLocation} from "react-router-dom";
 
 export const Editor = ({onChange, onSubmit, submitting, value, submitText}) => (
     <>
@@ -76,3 +77,31 @@ export const getUserName = (id, callback, failedCallback) => {
         return userDataList[id].user.username;
     }
 }
+let navigateCallbackArray = []
+
+function navigateCallbacks() {
+    console.log(navigateCallbackArray);
+    for (const callbackKey in navigateCallbackArray) {
+        navigateCallbackArray[callbackKey](window.location.pathname);
+    }
+}
+
+export const navigateWithoutRefresh = (link) => {
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    window.history.pushState(null, null, link)
+    // window.history.replaceState()
+    navigateCallbacks();
+}
+export const addNavigateCallback = (callback) => {
+    if (callback instanceof Function && !navigateCallbackArray.includes(callback)) {
+        navigateCallbackArray.push(callback);
+    }
+}
+window.addEventListener('hashchange', function () {
+    navigateCallbacks();
+});
+
+window.addEventListener('popstate', function () {
+    navigateCallbacks();
+});

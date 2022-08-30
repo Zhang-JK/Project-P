@@ -8,7 +8,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "antd": "^4.22.3",
+    "antd": "^4.22.7",
     "bootstrap": "^5.2.0",
     "crypto-js": "^4.1.1",
     "hash-wasm": "^4.9.0",
@@ -24,7 +24,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:dev": "cross-env REACT_APP_ENV=development react-scripts start",
+    "start:prod": "cross-env REACT_APP_ENV=production react-scripts start",
     "build": "react-scripts build",
+    "build:prod": "cross-env REACT_APP_ENV=production react-scripts build",
+    "build:dev": "cross-env REACT_APP_ENV=development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -45,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }

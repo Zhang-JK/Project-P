@@ -1,11 +1,12 @@
 package com.jk.projectp.service;
 
 import cn.hutool.core.util.IdUtil;
+import com.jk.projectp.dao.RoleDAO;
 import com.jk.projectp.dao.UserDAO;
+import com.jk.projectp.model.Role;
 import com.jk.projectp.model.User;
 import cn.hutool.crypto.SecureUtil;
 import com.jk.projectp.result.MemberResponse;
-import com.jk.projectp.result.pojo.UserPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ import java.util.Set;
 public class UserService {
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    RoleDAO roleDAO;
+
 
     public User getByUsername(String username) {
         return userDAO.findByUsername(username);
@@ -67,7 +71,7 @@ public class UserService {
     }
 
     public boolean verifySession(User userDB, String session) {
-        if (userDB != null){
+        if (userDB != null) {
             String sessionDB = userDB.getSession();
             if (sessionDB != null)
                 return sessionDB.equals(session);
@@ -122,4 +126,30 @@ public class UserService {
     public User updateUser(User user) {
         return userDAO.save(user);
     }
+
+    public User saveUser(String username, String password, String email, String name) {
+        User user = userDAO.findByUsername(username);
+        if (userDAO.findByUsername(username) == null) {
+            user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setName(name);
+            updatePassword(user, password);
+        }
+        return user;
+    }
+
+    public boolean setRoles(User user, Set<String> roles) {
+        Set<Role> newRoles = new HashSet<>();
+        for (String role : roles) {
+            Role byName = roleDAO.findByName(role);
+            if (byName != null)
+                newRoles.add(byName);
+            else
+                return false;
+        }
+        user.setRoles(newRoles);
+        return true;
+    }
+
 }
