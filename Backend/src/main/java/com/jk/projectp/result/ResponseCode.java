@@ -18,6 +18,8 @@ public enum ResponseCode {
     ITSC_FORMAT_WRONG(1015, "Itsc email format is wrong!"),
     ITSC_ALREADY_EXIST(1016, "This itsc has already registered!"),
     FRESH_POSITION_NOT_SELECTED(1017, "Fresh positions not selected!"),
+
+    CREATE_ANNOUNCEMENT_ERROR(1018, "Error in creating announcement"),
     ;
 
     private final int code;
