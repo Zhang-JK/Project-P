@@ -7,6 +7,8 @@ import {TestPage} from "./Pages/TestPage";
 import UserManagePage from "./Pages/UserManagePage";
 import RegisterPage from "./Pages/RegisterPage";
 import FreshManagePage from "./Pages/FreshManagePage";
+import ChangePassword from "./Pages/ChangePassword";
+import Personal from "./Pages/Personal";
 
 function App() {
     return (
@@ -20,6 +22,8 @@ function App() {
                 <Route path="/test" element={<TestPage/>}/>
                 {/*<Route path="/feedback/*" element={<FeedbackPage/>}/>*/}
                 <Route path="/register" element={<RegisterPage/>}/>
+                <Route path="/changePassword" element={<ChangePassword/>}/>
+                <Route path="/Personal" element={<Personal/>}/>
             </Routes>
         </div>
     );
