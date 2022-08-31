@@ -60,6 +60,8 @@ const getPage = (routerDicArray, paths, userInfo) => {
 
 
 export const MyRouter = (props) => {
+    if (props.location ===  "/")
+        window.location.replace("/home")
     const url = props.location;
     const paths = url.trim().split("/")
     return getPage(routerDic, paths.slice(1), props.userInfo);
