@@ -54,7 +54,7 @@ class SideBar extends React.Component<> {
         ].flat();
 
         return (
-            <Menu theme="dark" defaultOpenKeys={['memberM']} defaultSelectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
+            <Menu theme="dark" defaultOpenKeys={['memberM']} selectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
                 switch (i.key) {
                     case ('logout'):
                         window.location.replace(`/login`)
