@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^4.22.7",
     "bootstrap": "^5.2.0",
+    "bootstrap-icons": "^1.9.1",
     "crypto-js": "^4.1.1",
     "hash-wasm": "^4.9.0",
     "js-priority-queue": "^0.1.5",

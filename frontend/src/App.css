@@ -1,3 +1,6 @@
+@import '~antd/dist/antd.css';
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
 .App {
   text-align: center;
 }
@@ -37,4 +40,3 @@
   }
 }
 
-@import '~antd/dist/antd.css';
