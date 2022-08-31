@@ -63,7 +63,7 @@ class RegisterPage extends React.Component<> {
                                 </Button>
                             </Popover>
                             <Button type="primary" shape="round" icon={<i className="bi bi-discord" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#5865F2", width: 150, marginLeft: "auto", marginRight: "auto", marginTop: 20}}
-                            onClick={() => {window.open("https://discord.com/invite/2dv8rYU54a")}}>
+                            onClick={() => {window.open("https://discord.gg/S2cFZHsg8K")}}>
                                 Discord
                             </Button>
                         </div>
@@ -101,7 +101,7 @@ class RegisterPage extends React.Component<> {
                                         </Button>
                                     </Popover>
                                     <Button className="m-2" type="primary" shape="round" icon={<i className="bi bi-discord" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#5865F2", width: 150, marginLeft: "auto", marginRight: "auto"}}
-                                            onClick={() => {window.open("https://discord.com/invite/2dv8rYU54a")}}>
+                                            onClick={() => {window.open("https://discord.gg/S2cFZHsg8K")}}>
                                         Discord
                                     </Button>
                                 </div>
