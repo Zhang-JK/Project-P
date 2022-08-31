@@ -1,4 +1,3 @@
-import {Route, Routes, useParams, Link, useLocation} from "react-router-dom";
 import Feedback from "../Components/Feedback";
 import {useState} from "react";
 import {Affix, Button, List, Modal, Skeleton} from "antd";
@@ -7,8 +6,7 @@ import React from "react";
 import FeedbackCommentPage from "./FeedbackCommentPage";
 import TextArea from "antd/es/input/TextArea";
 import {PlusCircleOutlined} from "@ant-design/icons";
-import {createComment, createFeedback} from "../Utils/Requests";
-import TemplatePage from "./TemplatePage";
+import {createFeedback} from "../Utils/Requests";
 import getRequest from "../Request/GetRequest";
 
 let fbDataOld = undefined;

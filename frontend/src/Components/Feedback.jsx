@@ -62,7 +62,7 @@ const Feedback = (props) => {
                         /> :
                         (linked ?
                             <div onClick={() => {
-                                navigateWithoutRefresh("/home/feedback/" + data.id)
+                                navigateWithoutRefresh("/feedback/" + data.id)
                             }}>
                                 <div style={{
                                     maxWidth: '100%',

@@ -3,7 +3,6 @@ import {Layout} from 'antd';
 import "./TemplatePage.css"
 import LogoWhite from '../assets/logo-c-n.png'
 import SideBar from "../Components/SideBar";
-import {useLocation} from "react-router-dom";
 
 const {Header, Content, Footer, Sider} = Layout;
 

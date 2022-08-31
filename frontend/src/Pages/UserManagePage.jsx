@@ -1,25 +1,11 @@
 import React, {useState} from 'react';
-import TemplatePage from "./TemplatePage";
 import getRequest from "../Request/GetRequest";
 import UserTable from "../Components/UserTable";
+import {Spin} from "antd";
 
-function UserManagePage() {
-    const [data, setData] = useState(null)
+function UserManagePage(props) {
     const [users, setUsers] = useState(null)
-    if (data == null) {
-        getRequest("user/getInfo")
-            .catch(error => {
-                console.log('ERROR: ', error)
-                window.location.replace("/login")
-            })
-            .then((res) => {
-                if (res.code !== 200) {
-                    window.location.replace("/login")
-                }
-                setData(res.data)
-            })
-    }
-    if (data != null && data.permissions['humanResource'] !== undefined && users == null) {
+    if (props.userInfo != null && props.userInfo.permissions['humanResource'] !== undefined && users == null) {
         getRequest("humanResource/list")
             .catch(error => {
                 console.log('ERROR: ', error)
@@ -32,12 +18,13 @@ function UserManagePage() {
             })
     }
 
-    return (
-        users != null &&
-        <div className="d-flex flex-column">
-            <UserTable data={users} reload={() => setUsers(null)}/>
-        </div>
-    )
+    if (users != null)
+        return (
+            <div className="d-flex flex-column">
+                <UserTable data={users} reload={() => setUsers(null)}/>
+            </div>
+        )
+    else return <Spin />
 }
 
 export default UserManagePage

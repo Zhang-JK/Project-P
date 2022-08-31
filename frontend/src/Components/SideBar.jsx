@@ -10,7 +10,6 @@ import {
     AlertOutlined,
     IdcardOutlined, LogoutOutlined
 } from "@ant-design/icons";
-import {useLocation} from "react-router-dom";
 import {navigateWithoutRefresh} from "../Utils/Utils";
 
 function getItem(label, key, icon, children) {
@@ -56,16 +55,12 @@ class SideBar extends React.Component<> {
 
         return (
             <Menu theme="dark" defaultOpenKeys={['memberM']} defaultSelectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
-                console.log(i)
                 switch (i.key) {
                     case ('logout'):
                         window.location.replace(`/login`)
                         break;
                     default:
-                        navigateWithoutRefresh(`/home/${i.key}`)
-                        // window.history.replaceState(null, null, )
-                        // this.props.setLocation(`/${i.key}`)
-                        // window.location.replace(`/${i.key}`)
+                        navigateWithoutRefresh(`/${i.key}`)
                 }
             }}/>
         );

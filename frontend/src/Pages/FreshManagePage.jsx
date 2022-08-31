@@ -1,25 +1,11 @@
 import React, {useState} from 'react';
-import TemplatePage from "./TemplatePage";
 import getRequest from "../Request/GetRequest";
 import FreshTable from "../Components/FreshTable";
+import {Spin} from "antd";
 
-function FreshManagePage() {
-    const [data, setData] = useState(null)
+function FreshManagePage(props) {
     const [fresh, setFresh] = useState(null)
-    if (data == null) {
-        getRequest("user/getInfo")
-            .catch(error => {
-                console.log('ERROR: ', error)
-                window.location.replace("/login")
-            })
-            .then((res) => {
-                if (res.code !== 200) {
-                    window.location.replace("/login")
-                }
-                setData(res.data)
-            })
-    }
-    if (data != null && data.permissions['humanResource'] !== undefined && fresh == null) {
+    if (props.userInfo != null && props.userInfo.permissions['humanResource'] !== undefined && fresh == null) {
         getRequest("fresh/list")
             .catch(error => {
                 console.log('ERROR: ', error)
@@ -32,12 +18,13 @@ function FreshManagePage() {
             })
     }
 
-    return (
-        fresh != null &&
-        <div className="d-flex flex-column">
-            <FreshTable data={fresh}/>
-        </div>
-    )
+    if (fresh != null)
+        return (
+            <div className="d-flex flex-column">
+                <FreshTable data={fresh}/>
+            </div>
+        )
+    else return <Spin />
 }
 
 export default FreshManagePage
