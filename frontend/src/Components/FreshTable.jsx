@@ -27,7 +27,7 @@ class FreshTable extends React.Component<> {
         if (filter.name != null && filter.name!== "")
             f = f.filter(i => i.name.indexOf(filter.name) !== -1)
         if (filter.email != null && filter.email!== "")
-            f = f.filter(i => i.email.indexOf(filter.email) !== -1)
+            f = f.filter(i => i.itsc.indexOf(filter.email) !== -1)
         if (filter.gender != null && filter.gender.length !== 0)
             f = f.filter(i => {
                 let match = false
