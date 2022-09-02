@@ -37,3 +37,23 @@ export function PositionToColor(p) {
             return "lime"
     }
 }
+
+export function StageToColor(p) {
+    switch (p){
+        case "Disqualified":
+            return "magenta"
+        case "Interview Ready":
+            return "orange"
+        case "Interview PASS":
+            return "geekblue"
+        case "Tutorial PASS":
+            return "blue"
+        case "Internal PASS":
+            return "cyan"
+        case "Official Member":
+            return "green"
+        case "Not Started":
+        default:
+            return "lime"
+    }
+}

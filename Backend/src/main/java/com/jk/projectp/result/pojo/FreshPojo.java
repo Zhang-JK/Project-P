@@ -23,7 +23,7 @@ public class FreshPojo {
     private String info;
     private Instant registerTime;
     private List<String> positions = new ArrayList<>();
-    private FreshStage stage;
+    private String stage;
     private Integer userId;
 
     public FreshPojo(Fresh f) {
@@ -38,7 +38,7 @@ public class FreshPojo {
         this.info = f.getInfo();
         this.registerTime = f.getRegisterTime();
         this.positions = f.getPositions().stream().map(Position::getName).collect(Collectors.toList());
-        this.stage = f.getStage();
+        this.stage = f.getStage().getFreshStage();
         this.userId = f.getUser().getId();
     }
 
@@ -130,11 +130,11 @@ public class FreshPojo {
         this.positions = positions;
     }
 
-    public FreshStage getStage() {
+    public String getStage() {
         return stage;
     }
 
-    public void setStage(FreshStage stage) {
+    public void setStage(String stage) {
         this.stage = stage;
     }
 
