@@ -4,8 +4,8 @@ import com.jk.projectp.model.Fresh;
 import com.jk.projectp.model.User;
 import com.jk.projectp.request.FreshRequest;
 import com.jk.projectp.result.BaseResult;
-import com.jk.projectp.result.FreshListResult;
 import com.jk.projectp.result.ResponseCode;
+import com.jk.projectp.result.pojo.FreshPojo;
 import com.jk.projectp.service.FreshService;
 import com.jk.projectp.service.RoleService;
 import com.jk.projectp.service.UserService;
@@ -40,13 +40,13 @@ public class FreshController {
     @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
     @GetMapping(value = "/api/fresh/list")
     @ResponseBody
-    public BaseResult<Set<FreshListResult>> listFresh(HttpServletRequest request) {
+    public BaseResult<Set<FreshPojo>> listFresh(HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, false)) {
-            return new BaseResult<>(ResponseCode.SUCCESS, freshService.getAll().stream().map(FreshListResult::new).collect(Collectors.toSet()));
+            return new BaseResult<>(ResponseCode.SUCCESS, freshService.getAll().stream().map(FreshPojo::new).collect(Collectors.toSet()));
         }
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
