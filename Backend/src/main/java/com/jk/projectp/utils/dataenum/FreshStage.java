@@ -2,7 +2,7 @@ package com.jk.projectp.utils.dataenum;
 
 public enum FreshStage {
     NONE("Not Started"),
-    Started("Interview Ready"),
+    STARTED("Interview Ready"),
     INTERVIEW("Interview PASS"),
     TUTORIAL("Tutorial PASS"),
     INTERNAL("Internal PASS"),

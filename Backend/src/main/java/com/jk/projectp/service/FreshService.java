@@ -4,6 +4,7 @@ import com.jk.projectp.dao.FreshDAO;
 import com.jk.projectp.dao.PositionDAO;
 import com.jk.projectp.model.Fresh;
 import com.jk.projectp.model.Position;
+import com.jk.projectp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,10 @@ public class FreshService {
 
     @Autowired
     private PositionDAO positionDAO;
+
+    public Fresh getFreshByUser(User u) {
+        return freshDAO.findByUser(u);
+    }
 
     public List<Fresh> getAll() {
         return freshDAO.findAll();
