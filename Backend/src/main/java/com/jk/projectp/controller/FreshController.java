@@ -9,6 +9,7 @@ import com.jk.projectp.result.pojo.FreshPojo;
 import com.jk.projectp.service.FreshService;
 import com.jk.projectp.service.RoleService;
 import com.jk.projectp.service.UserService;
+import com.jk.projectp.utils.dataenum.FreshStage;
 import com.jk.projectp.utils.dataenum.WebPages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class FreshController {
     RoleService roleService;
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/fresh/list")
     @ResponseBody
     public BaseResult<Set<FreshPojo>> listFresh(HttpServletRequest request) {
@@ -53,7 +54,7 @@ public class FreshController {
 
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fresh/create")
     @ResponseBody
     public BaseResult<String> createFresh(@RequestBody FreshRequest data) {
@@ -87,6 +88,7 @@ public class FreshController {
         fresh.setGrade(data.getGrade());
         fresh.setMajor(data.getMajor());
         fresh.setInfo(data.getInfo());
+        fresh.setStage(FreshStage.NONE);
         fresh.setRegisterTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
         freshService.setPositions(fresh, data.getPositions());
         fresh.setUser(user);

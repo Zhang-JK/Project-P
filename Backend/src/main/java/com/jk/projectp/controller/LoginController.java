@@ -23,7 +23,7 @@ public class LoginController {
     @Autowired
     private FreshService freshService;
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/user/login")
     @ResponseBody
     public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
@@ -49,7 +49,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/user/logout")
     @ResponseBody
     public BaseResult<String> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -63,7 +63,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/user/changePassword")
     @ResponseBody
     public BaseResult<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword, HttpServletRequest request) {
@@ -79,7 +79,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/user/getInfo")
     @ResponseBody
     public BaseResult<UserInfoResponse> getInfo(HttpServletRequest request) {

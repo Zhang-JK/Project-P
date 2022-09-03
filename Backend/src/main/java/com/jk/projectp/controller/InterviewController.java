@@ -34,7 +34,7 @@ public class InterviewController {
     @Autowired
     private RoleService roleService;
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/interview/getSections")
     @ResponseBody
     public BaseResult<List<InterviewPojo>> getSections(HttpServletRequest request) {
@@ -45,7 +45,7 @@ public class InterviewController {
         return new BaseResult<>(ResponseCode.SUCCESS, interviewService.getInterviews().stream().map(InterviewPojo::new).toList());
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/interview/getAll")
     @ResponseBody
     public BaseResult<List<InterviewFreshResult>> getAll(HttpServletRequest request) {
@@ -59,7 +59,7 @@ public class InterviewController {
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/interview/update")
     @ResponseBody
     public BaseResult<InterviewInfoPojo> update(HttpServletRequest request, @RequestParam Integer freshId, @RequestParam Integer interviewId) {
@@ -75,7 +75,7 @@ public class InterviewController {
         }
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/interview/getInfo")
     @ResponseBody
     public BaseResult<InterviewInfoPojo> getInfo(HttpServletRequest request, @RequestParam Integer freshId) {
