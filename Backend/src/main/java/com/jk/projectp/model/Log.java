@@ -11,8 +11,8 @@ public class Log {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "catalog", nullable = false)
-    private Integer catalog;
+    @Column(name = "catalog", nullable = false, length = 50)
+    private String catalog;
 
     @Column(name = "user_id")
     private Integer userId;
@@ -35,6 +35,39 @@ public class Log {
     @Column(name = "timestamp", nullable = false)
     private Instant timestamp;
 
+    @Column(name = "op_id", nullable = false)
+    private Integer opId;
+
+    @Column(name = "fresh_id")
+    private Integer freshId;
+
+    @Column(name = "remark", length = 500)
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getFreshId() {
+        return freshId;
+    }
+
+    public void setFreshId(Integer freshId) {
+        this.freshId = freshId;
+    }
+
+    public Integer getOpId() {
+        return opId;
+    }
+
+    public void setOpId(Integer opId) {
+        this.opId = opId;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -43,11 +76,11 @@ public class Log {
         this.id = id;
     }
 
-    public Integer getCatalog() {
+    public String getCatalog() {
         return catalog;
     }
 
-    public void setCatalog(Integer catalog) {
+    public void setCatalog(String catalog) {
         this.catalog = catalog;
     }
 

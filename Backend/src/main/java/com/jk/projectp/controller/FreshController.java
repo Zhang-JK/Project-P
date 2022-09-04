@@ -92,11 +92,25 @@ public class FreshController {
         fresh.setRegisterTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
         freshService.setPositions(fresh, data.getPositions());
         fresh.setUser(user);
-        userService.setRoles(user, new HashSet<String>(List.of("Fresh")));
+        userService.setRoles(user, new HashSet<>(List.of("Fresh")));
         if (freshService.createFresh(fresh)) {
             return new BaseResult<>(ResponseCode.SUCCESS);
         } else {
             return new BaseResult<>(ResponseCode.ITSC_ALREADY_EXIST);
         }
+    }
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
+    @GetMapping(value = "/api/fresh/stage")
+    @ResponseBody
+    public BaseResult<Integer> changeStage(HttpServletRequest request, @RequestParam Integer freshId, @RequestParam FreshStage stage, @RequestParam String msg) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, true)) {
+            return freshService.updateStage(user, freshId, stage, msg) ? new BaseResult<>(ResponseCode.SUCCESS) : new BaseResult<>(ResponseCode.USER_NOT_EXIST);
+        }
+        return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 }

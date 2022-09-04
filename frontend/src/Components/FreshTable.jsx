@@ -1,6 +1,9 @@
 import React from "react";
-import {Button, Form, Input, Select, Statistic, Table, Tag} from 'antd';
+import {Button, Form, Input, Modal, Select, Statistic, Table, Tag} from 'antd';
 import {PositionToColor, StageToColor} from "../Utils/RoleToColor";
+import {FreshStageList} from "../Utils/StringEnum";
+import {CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import getRequest from "../Request/GetRequest";
 const { Option } = Select;
 
 const {Column} = Table;
@@ -17,8 +20,11 @@ class FreshTable extends React.Component<> {
                 gender: [],
                 grade: [],
                 position: [],
-                stage: ""
-            })
+                stage: "",
+            }),
+            changeStageShow: false,
+            changeStageId: null,
+            changeStageState: 0
         }
     }
 
@@ -90,6 +96,33 @@ class FreshTable extends React.Component<> {
                 stage: v.stage
             })
         })
+    }
+
+    onCancelStage = () => {
+        this.setState({changeStageShow: false, changeStageId: null, changeStageState: 0})
+    }
+
+    changeStage = (v) => {
+        this.setState({changeStageState: 1})
+        getRequest(`fresh/stage?freshId=${this.state.changeStageId.id}&stage=${v.stage}&msg=${v.remark}`)
+            .then(r => {
+                if (r.code === 200) {
+                    let localFilterData = this.state.filterData
+                    let localRawData = this.state.freshData
+                    let stage = FreshStageList.find(i => i.dbName === v.stage) == null ? "Disqualified" : FreshStageList.find(i => i.dbName === v.stage).name
+                    localFilterData.forEach((d, i) => {
+                        if (d.id === this.state.changeStageId.id)
+                            localFilterData[i].stage = stage
+                    })
+                    localRawData.forEach((d, i) => {
+                        if (d.id === this.state.changeStageId.id)
+                            localRawData[i].stage = stage
+                    })
+                    this.setState({changeStageState: 2, filterData: localFilterData, freshData: localRawData})
+                }
+                else
+                    this.setState({changeStageState: 3})
+            })
     }
 
     render() {
@@ -201,10 +234,41 @@ class FreshTable extends React.Component<> {
                                 )}</span>)}/>
                     <Column width={800} title="Info" dataIndex="info" key="info" />
                     <Column width={200} title="Reg Time" dataIndex="registerTime" key="registerTime" />
-                    <Column width={150} title="Operation" fixed="right" key="op" render={_ =>
-                        <Button type="primary">Change Stage</Button>
+                    <Column width={150} title="Operation" dataIndex="id" fixed="right" key="op" render={(_, r) =>
+                        <Button type="primary" onClick={() => this.setState({changeStageShow: true, changeStageId: r})}>Change Stage</Button>
                     } />
                 </Table>
+                <Modal title={`Change Stage for id ${this.state.changeStageId == null ? null : this.state.changeStageId.name}`} visible={this.state.changeStageShow} keyboard={true}
+                       onCancel={this.onCancelStage}
+                       footer={[
+                           <Button key="Cancel" onClick={this.onCancelStage}>
+                               Close
+                           </Button>]
+                       }>
+                    <div>
+                        <Form onFinish={this.changeStage}>
+                            <Form.Item label="Stage" name="stage" rules={[{required: true}]}>
+                                <Select>
+                                    {FreshStageList.map(i =>
+                                        <Select.Option value={i.dbName}>{i.name}</Select.Option>
+                                    )}
+                                    <Select.Option value="FAIL"><strong style={{color: "red"}}>Disqualified</strong></Select.Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Remark" name="remark">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item>
+                                <div>
+                                    {this.state.changeStageState===0 && <Button type="primary" htmlType="submit">Submit</Button>}
+                                    {this.state.changeStageState===1 && <LoadingOutlined/>}
+                                    {this.state.changeStageState===2 && <div><CheckCircleOutlined />DONE</div>}
+                                    {this.state.changeStageState===3 && <div><CloseCircleOutlined />FAIL</div>}
+                                </div>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </Modal>
             </div>
         )
     }
