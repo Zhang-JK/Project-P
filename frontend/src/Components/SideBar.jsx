@@ -29,6 +29,7 @@ class SideBar extends React.Component<> {
                 getItem('Member Manage', 'memberM', <UserSwitchOutlined/>, [
                     getItem('All Users', `member`),
                     getItem('Fresh Member', `fresh`),
+                    getItem('Interview', `interview`),
                 ]),
             this.props.permissions == null || this.props.permissions['projectManage'] == null ? null :
                 getItem('Project Manage', 'project', <ScheduleOutlined/>),

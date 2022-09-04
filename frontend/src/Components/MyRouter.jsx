@@ -4,6 +4,7 @@ import UserManagePage from "../Pages/UserManagePage";
 import FreshManagePage from "../Pages/FreshManagePage";
 import HomePage from "../Pages/HomePage";
 import Personal from "../Pages/Personal"
+import InterviewPage from "../Pages/InterviewPage";
 
 const routerDic = [
     {
@@ -30,6 +31,11 @@ const routerDic = [
         type: "Child_With_Arg",
         path: "personal",
         component: Personal,
+        children: []
+    }, {
+        type: "Child_With_Arg",
+        path: "interview",
+        component: InterviewPage,
         children: []
     }
 ];

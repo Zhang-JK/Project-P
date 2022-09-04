@@ -95,67 +95,69 @@ class FreshTable extends React.Component<> {
     render() {
         return (
             <div className="d-flex flex-column" style={{width: "100%"}}>
-                <div className="m-2 d-flex flex-row" style={{marginBottom: 20, width: "100%"}}>
-                    <div className="d-flex flex-row justify-content-around" style={{width: "100%"}}>
-                        <Form onFinish={this.filterClick} >
-                            <Form.Item style={{marginBottom: 0}}>
-                                <Input.Group compact>
-                                    <Form.Item label="Name" name="name" style={{marginRight: 30}}>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item label="Email" name="email" style={{marginRight: 30}}>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item label="Gender" name="gender" style={{width: 300, marginRight: 30}}>
-                                        <Select mode="multiple" >
-                                            <Option value="MALE">male</Option>
-                                            <Option value="FEMALE">female</Option>
-                                            <Option value="NOT_TELL">prefer not to say</Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Button htmlType="submit" type="primary">Filter</Button>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                            <Form.Item style={{marginBottom: 0}}>
-                                <Input.Group compact>
-                                    <Form.Item name={"grade"} label={"Year of Study"} style={{width: 320, marginRight: 30}}>
-                                        <Select mode="multiple">
-                                            <Option value="UG_1">UG-Year1</Option>
-                                            <Option value="UG_2">UG-Year2</Option>
-                                            <Option value="UG_3">UG-Year3</Option>
-                                            <Option value="UG_4">UG-Year4</Option>
-                                            <Option value="PG">PG</Option>
-                                            <Option value="OTHER">Other</Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item label="Position" name="position" style={{width: 350, marginRight: 30}}>
-                                        <Select mode="multiple" >
-                                            <Option value="SOFTWARE">Software</Option>
-                                            <Option value="HARDWARE">Hardware</Option>
-                                            <Option value="MECHANICAL">Mechanical</Option>
-                                            <Option value="LOGISTICS">Logistics</Option>
-                                            <Option value="WEBSITE">Website</Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item label="Stage" name="stage" style={{width: 200}}>
-                                        <Select>
-                                            <Option value="Disqualified">Disqualified</Option>
-                                            <Option value="Interview Ready">Interview Ready</Option>
-                                            <Option value="Interview PASS">Interview PASS</Option>
-                                            <Option value="Tutorial PASS">Tutorial PASS</Option>
-                                            <Option value="Internal PASS">Internal PASS</Option>
-                                            <Option value="Official Member">Official Member</Option>
-                                            <Option value="Not Started">Not Started</Option>
-                                        </Select>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                        </Form>
-                        <Statistic title="Total Count" value={this.state.filterData.length} style={{marginTop: "auto", marginBottom: "auto"}} />
+                {this.props.filter &&
+                    <div className="m-2 d-flex flex-row" style={{marginBottom: 20, width: "100%"}}>
+                        <div className="d-flex flex-row justify-content-around" style={{width: "100%"}}>
+                            <Form onFinish={this.filterClick} >
+                                <Form.Item style={{marginBottom: 0}}>
+                                    <Input.Group compact>
+                                        <Form.Item label="Name" name="name" style={{marginRight: 30}}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item label="Email" name="email" style={{marginRight: 30}}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item label="Gender" name="gender" style={{width: 300, marginRight: 30}}>
+                                            <Select mode="multiple" >
+                                                <Option value="MALE">male</Option>
+                                                <Option value="FEMALE">female</Option>
+                                                <Option value="NOT_TELL">prefer not to say</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Button htmlType="submit" type="primary">Filter</Button>
+                                        </Form.Item>
+                                    </Input.Group>
+                                </Form.Item>
+                                <Form.Item style={{marginBottom: 0}}>
+                                    <Input.Group compact>
+                                        <Form.Item name={"grade"} label={"Year of Study"} style={{width: 320, marginRight: 30}}>
+                                            <Select mode="multiple">
+                                                <Option value="UG_1">UG-Year1</Option>
+                                                <Option value="UG_2">UG-Year2</Option>
+                                                <Option value="UG_3">UG-Year3</Option>
+                                                <Option value="UG_4">UG-Year4</Option>
+                                                <Option value="PG">PG</Option>
+                                                <Option value="OTHER">Other</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item label="Position" name="position" style={{width: 350, marginRight: 30}}>
+                                            <Select mode="multiple" >
+                                                <Option value="SOFTWARE">Software</Option>
+                                                <Option value="HARDWARE">Hardware</Option>
+                                                <Option value="MECHANICAL">Mechanical</Option>
+                                                <Option value="LOGISTICS">Logistics</Option>
+                                                <Option value="WEBSITE">Website</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item label="Stage" name="stage" style={{width: 200}}>
+                                            <Select>
+                                                <Option value="Disqualified">Disqualified</Option>
+                                                <Option value="Interview Ready">Interview Ready</Option>
+                                                <Option value="Interview PASS">Interview PASS</Option>
+                                                <Option value="Tutorial PASS">Tutorial PASS</Option>
+                                                <Option value="Internal PASS">Internal PASS</Option>
+                                                <Option value="Official Member">Official Member</Option>
+                                                <Option value="Not Started">Not Started</Option>
+                                            </Select>
+                                        </Form.Item>
+                                    </Input.Group>
+                                </Form.Item>
+                            </Form>
+                            <Statistic title="Total Count" value={this.state.filterData.length} style={{marginTop: "auto", marginBottom: "auto"}} />
+                        </div>
                     </div>
-                </div>
+                }
                 <Table size="small" scroll={{x: "100%"}} style={{maxWidth: "100%"}} dataSource={this.state.filterData}>
                     <Column width={65} fixed="left" title="ID" dataIndex="userId" key="userId" defaultSortOrder="ascend" sorter={{compare: (a, b) => a.id - b.id, multiple: 1}}/>
                     <Column width={150} fixed="left" title="Name" dataIndex="name" key="name"/>
@@ -199,6 +201,9 @@ class FreshTable extends React.Component<> {
                                 )}</span>)}/>
                     <Column width={800} title="Info" dataIndex="info" key="info" />
                     <Column width={200} title="Reg Time" dataIndex="registerTime" key="registerTime" />
+                    <Column width={150} title="Operation" fixed="right" key="op" render={_ =>
+                        <Button type="primary">Change Stage</Button>
+                    } />
                 </Table>
             </div>
         )

@@ -21,7 +21,7 @@ function FreshManagePage(props) {
     if (fresh != null)
         return (
             <div className="d-flex flex-column">
-                <FreshTable data={fresh}/>
+                <FreshTable data={fresh} filter={true}/>
             </div>
         )
     else return <Spin />
