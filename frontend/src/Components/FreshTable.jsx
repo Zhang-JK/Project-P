@@ -4,8 +4,9 @@ import {PositionToColor, StageToColor} from "../Utils/RoleToColor";
 import {FreshStageList} from "../Utils/StringEnum";
 import {CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined} from "@ant-design/icons";
 import getRequest from "../Request/GetRequest";
-const { Option } = Select;
+import toExcel from "../Utils/excel"
 
+const { Option } = Select;
 const {Column} = Table;
 
 class FreshTable extends React.Component<> {
@@ -26,6 +27,17 @@ class FreshTable extends React.Component<> {
             changeStageId: null,
             changeStageState: 0
         }
+    }
+
+    formatJson = (filterVal, jsonData) => {
+        return jsonData.map(v => filterVal.map(j => v[j]))
+    }
+
+    exportData = () => {
+        const th=["User ID","Name","Chinese Name","Nick Name","Gender","ITSC Email","Grade","Major","Info","Register Time","Position","Stage","Fresh ID"];
+        const filterVal=Object.keys(this.state.filterData[0]);
+        const data = this.formatJson(filterVal, this.state.filterData);
+        toExcel({th,data,fileName:"fresh",fileType:"xlsx",sheetName:"page_1"})
     }
 
     filterRes(users, filter) {
@@ -187,6 +199,7 @@ class FreshTable extends React.Component<> {
                                     </Input.Group>
                                 </Form.Item>
                             </Form>
+                            <Button onClick={this.exportData} type="primary" style={{marginTop: "auto", marginBottom: "auto"}}>Export</Button>
                             <Statistic title="Total Count" value={this.state.filterData.length} style={{marginTop: "auto", marginBottom: "auto"}} />
                         </div>
                     </div>
