@@ -28,10 +28,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 @Service
 public class MailService {
@@ -104,8 +101,8 @@ public class MailService {
         message.setRaw(encodedEmail);
         try {
             message = service.users().messages().send("me", message).execute();
-            System.out.println("Message Id: " + message.getId());
-            System.out.println(message.toPrettyString());
+            System.out.println("Message Id  " + message.getId() + "Sent");
+//            System.out.println(message.toPrettyString());
             return message;
         } catch (GoogleJsonResponseException e) {
             GoogleJsonError error = e.getDetails();
@@ -123,5 +120,19 @@ public class MailService {
             return sendEmail("me", user.getEmail(), subject, body);
         else
             throw new NullPointerException();
+    }
+
+    // Send msg to users and return failed user
+    public Set<User> sendMsgToGroup(Set<User> users, String subject, String body) {
+        Set<User> result = new HashSet<>();
+        for (User user :
+                users) {
+            try {
+                sendMailToUser(user, subject, body);
+            } catch (Exception e) {
+                result.add(user);
+            }
+        }
+        return result;
     }
 }
