@@ -5,6 +5,10 @@ target/
 !**/src/test/**/target/
 .mvn
 
+tokens/
+src/main/resources/application.properties
+src/main/resources/credentials.json
+
 ### STS ###
 .apt_generated
 .classpath
