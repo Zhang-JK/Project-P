@@ -1,6 +1,6 @@
 async function postRequest(url, body) {
     return await fetch(
-        (process.env.REACT_APP_ENV === "production" ? "http://laojk.club:8080/api/" : "http://localhost:8080/api/") +url,
+        (process.env.REACT_APP_ENV === "production" ? "http://laojk.club:8080/api/" : "http://10.89.51.52:8080/api/") +url,
         {
             mode: 'cors',
             credentials: 'include',

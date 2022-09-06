@@ -1,56 +1,58 @@
-import FeedbackPage, {Feedbacks} from "../Pages/FeedbackPage";
+import FeedbackPage from "../Pages/FeedbackPage";
 import {createElement} from "react";
 import UserManagePage from "../Pages/UserManagePage";
 import FreshManagePage from "../Pages/FreshManagePage";
+import HomePage from "../Pages/HomePage";
+import Personal from "../Pages/Personal"
+import InterviewPage from "../Pages/InterviewPage";
 
-
-class RouterComponent {
-    constructor(type, path, component) {
-        this.type = type
-        this.path = path
-        this.component = component
-        this.children = []
+const routerDic = [
+    {
+        type: "Child_With_Arg",
+        path: "feedback",
+        component: FeedbackPage,
+        children: []
+    }, {
+        type: "Child_With_Arg",
+        path: "member",
+        component: UserManagePage,
+        children: []
+    }, {
+        type: "Child_With_Arg",
+        path: "fresh",
+        component: FreshManagePage,
+        children: []
+    }, {
+        type: "Child_No_Arg",
+        path: "home",
+        component: HomePage,
+        children: []
+    }, {
+        type: "Child_With_Arg",
+        path: "personal",
+        component: Personal,
+        children: []
+    }, {
+        type: "Child_With_Arg",
+        path: "interview",
+        component: InterviewPage,
+        children: []
     }
-}
-
-const routerDic = {
-    type: "Father",
-    path: "home",
-    component: undefined,
-    children: [
-        {
-            type: "Child_With_Arg",
-            path: "feedback",
-            component: FeedbackPage,
-            children: []
-        },{
-            type: "Child_With_Arg",
-            path: "member",
-            component: UserManagePage,
-            children: []
-        },{
-            type: "Child_With_Arg",
-            path: "fresh",
-            component: FreshManagePage,
-            children: []
-        }]
-};
-const getPage = (routerDicArray, paths) => {
-    console.log("In get page: ",routerDicArray, paths)
+];
+const getPage = (routerDicArray, paths, userInfo) => {
     if (paths instanceof Array) {
         for (const routerDic in routerDicArray) {
-            console.log("routerDic:", routerDicArray[routerDic]);
             if (routerDicArray[routerDic].path === paths[0]) {
                 switch (routerDicArray[routerDic].type) {
                     case "Father":
                         return getPage(routerDicArray[routerDic].children, paths.slice(1))
                     case "Child_No_Arg":
-                        return createElement(routerDicArray[routerDic].component, {});
+                        return createElement(routerDicArray[routerDic].component, {userInfo: userInfo});
                     case "Child_With_Arg":
                         if (paths[1])
-                            return createElement(routerDicArray[routerDic].component, {arg: paths[1]});
+                            return createElement(routerDicArray[routerDic].component, {userInfo: userInfo, arg: paths[1]});
                         else
-                            return createElement(routerDicArray[routerDic].component, {});
+                            return createElement(routerDicArray[routerDic].component, {userInfo: userInfo});
                     default:
                         alert("Wrong router type!");
                         return undefined;
@@ -58,18 +60,15 @@ const getPage = (routerDicArray, paths) => {
             }
         }
     } else {
-        console.log("Path is no an array");
         return undefined;
     }
 }
 
 
 export const MyRouter = (props) => {
-    console.log("MyRouter props", props)
+    if (props.location ===  "/")
+        window.location.replace("/home")
     const url = props.location;
     const paths = url.trim().split("/")
-    const routerDicArray = [routerDic];
-    let page = getPage(routerDicArray, paths.slice(1));
-    console.log(page)
-    return page;
+    return getPage(routerDic, paths.slice(1), props.userInfo);
 }

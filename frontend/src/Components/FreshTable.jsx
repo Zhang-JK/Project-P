@@ -1,8 +1,12 @@
 import React from "react";
-import {Button, Form, Input, Select, Statistic, Table, Tag} from 'antd';
-import {PositionToColor} from "../Utils/RoleToColor";
-const { Option } = Select;
+import {Button, Form, Input, Modal, Select, Statistic, Table, Tag} from 'antd';
+import {PositionToColor, StageToColor} from "../Utils/RoleToColor";
+import {FreshStageList} from "../Utils/StringEnum";
+import {CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined} from "@ant-design/icons";
+import getRequest from "../Request/GetRequest";
+import toExcel from "../Utils/excel"
 
+const { Option } = Select;
 const {Column} = Table;
 
 class FreshTable extends React.Component<> {
@@ -16,9 +20,24 @@ class FreshTable extends React.Component<> {
                 email: "",
                 gender: [],
                 grade: [],
-                position: []
-            })
+                position: [],
+                stage: "",
+            }),
+            changeStageShow: false,
+            changeStageId: null,
+            changeStageState: 0
         }
+    }
+
+    formatJson = (filterVal, jsonData) => {
+        return jsonData.map(v => filterVal.map(j => v[j]))
+    }
+
+    exportData = () => {
+        const th=["User ID","Name","Chinese Name","Nick Name","Gender","ITSC Email","Grade","Major","Info","Register Time","Position","Stage","Fresh ID"];
+        const filterVal=Object.keys(this.state.filterData[0]);
+        const data = this.formatJson(filterVal, this.state.filterData);
+        toExcel({th,data,fileName:"fresh",fileType:"xlsx",sheetName:"page_1"})
     }
 
     filterRes(users, filter) {
@@ -27,7 +46,9 @@ class FreshTable extends React.Component<> {
         if (filter.name != null && filter.name!== "")
             f = f.filter(i => i.name.indexOf(filter.name) !== -1)
         if (filter.email != null && filter.email!== "")
-            f = f.filter(i => i.email.indexOf(filter.email) !== -1)
+            f = f.filter(i => i.itsc.indexOf(filter.email) !== -1)
+        if (filter.stage != null && filter.stage!== "")
+            f = f.filter(i => i.stage.indexOf(filter.stage) !== -1)
         if (filter.gender != null && filter.gender.length !== 0)
             f = f.filter(i => {
                 let match = false
@@ -70,7 +91,8 @@ class FreshTable extends React.Component<> {
                 email: "",
                 gender: [],
                 grade: [],
-                position: []
+                position: [],
+                stage: ""
             })
         })
     }
@@ -82,67 +104,112 @@ class FreshTable extends React.Component<> {
                 email: v.email,
                 gender: v.gender,
                 grade: v.grade,
-                position: v.position
+                position: v.position,
+                stage: v.stage
             })
         })
+    }
+
+    onCancelStage = () => {
+        this.setState({changeStageShow: false, changeStageId: null, changeStageState: 0})
+    }
+
+    changeStage = (v) => {
+        this.setState({changeStageState: 1})
+        getRequest(`fresh/stage?freshId=${this.state.changeStageId.id}&stage=${v.stage}&msg=${v.remark}`)
+            .then(r => {
+                if (r.code === 200) {
+                    let localFilterData = this.state.filterData
+                    let localRawData = this.state.freshData
+                    let stage = FreshStageList.find(i => i.dbName === v.stage) == null ? "Disqualified" : FreshStageList.find(i => i.dbName === v.stage).name
+                    localFilterData.forEach((d, i) => {
+                        if (d.id === this.state.changeStageId.id)
+                            localFilterData[i].stage = stage
+                    })
+                    localRawData.forEach((d, i) => {
+                        if (d.id === this.state.changeStageId.id)
+                            localRawData[i].stage = stage
+                    })
+                    this.setState({changeStageState: 2, filterData: localFilterData, freshData: localRawData})
+                }
+                else
+                    this.setState({changeStageState: 3})
+            })
     }
 
     render() {
         return (
             <div className="d-flex flex-column" style={{width: "100%"}}>
-                <div className="m-2 d-flex flex-row" style={{marginBottom: 20, width: "100%"}}>
-                    <div className="d-flex flex-row justify-content-around" style={{width: "100%"}}>
-                        <Form onFinish={this.filterClick} >
-                            <Form.Item style={{marginBottom: 0}}>
-                                <Input.Group compact>
-                                    <Form.Item label="Name" name="name" style={{marginRight: 30}}>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item label="Email" name="email" style={{marginRight: 30}}>
-                                        <Input />
-                                    </Form.Item>
-                                    <Form.Item label="Gender" name="gender" style={{width: 300, marginRight: 30}}>
-                                        <Select mode="multiple" >
-                                            <Option value="MALE">male</Option>
-                                            <Option value="FEMALE">female</Option>
-                                            <Option value="NOT_TELL">prefer not to say</Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Button htmlType="submit" type="primary">Filter</Button>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                            <Form.Item style={{marginBottom: 0}}>
-                                <Input.Group compact>
-                                    <Form.Item name={"grade"} label={"Year of Study"} style={{width: 400, marginRight: 30}}>
-                                        <Select mode="multiple">
-                                            <Option value="UG_1">UG-Year1</Option>
-                                            <Option value="UG_2">UG-Year2</Option>
-                                            <Option value="UG_3">UG-Year3</Option>
-                                            <Option value="UG_4">UG-Year4</Option>
-                                            <Option value="PG">PG</Option>
-                                            <Option value="OTHER">Other</Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item label="Position" name="position" style={{width: 450}}>
-                                        <Select mode="multiple" >
-                                            <Option value="SOFTWARE">Software</Option>
-                                            <Option value="HARDWARE">Hardware</Option>
-                                            <Option value="MECHANICAL">Mechanical</Option>
-                                            <Option value="LOGISTICS">Logistics</Option>
-                                            <Option value="WEBSITE">Website</Option>
-                                        </Select>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                        </Form>
-                        <Statistic title="Total Count" value={this.state.filterData.length} style={{marginTop: "auto", marginBottom: "auto"}} />
+                {this.props.filter &&
+                    <div className="m-2 d-flex flex-row" style={{marginBottom: 20, width: "100%"}}>
+                        <div className="d-flex flex-row justify-content-around" style={{width: "100%"}}>
+                            <Form onFinish={this.filterClick} >
+                                <Form.Item style={{marginBottom: 0}}>
+                                    <Input.Group compact>
+                                        <Form.Item label="Name" name="name" style={{marginRight: 30}}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item label="Email" name="email" style={{marginRight: 30}}>
+                                            <Input />
+                                        </Form.Item>
+                                        <Form.Item label="Gender" name="gender" style={{width: 300, marginRight: 30}}>
+                                            <Select mode="multiple" >
+                                                <Option value="MALE">male</Option>
+                                                <Option value="FEMALE">female</Option>
+                                                <Option value="NOT_TELL">prefer not to say</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Button htmlType="submit" type="primary">Filter</Button>
+                                        </Form.Item>
+                                    </Input.Group>
+                                </Form.Item>
+                                <Form.Item style={{marginBottom: 0}}>
+                                    <Input.Group compact>
+                                        <Form.Item name={"grade"} label={"Year of Study"} style={{width: 320, marginRight: 30}}>
+                                            <Select mode="multiple">
+                                                <Option value="UG_1">UG-Year1</Option>
+                                                <Option value="UG_2">UG-Year2</Option>
+                                                <Option value="UG_3">UG-Year3</Option>
+                                                <Option value="UG_4">UG-Year4</Option>
+                                                <Option value="PG">PG</Option>
+                                                <Option value="OTHER">Other</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item label="Position" name="position" style={{width: 350, marginRight: 30}}>
+                                            <Select mode="multiple" >
+                                                <Option value="SOFTWARE">Software</Option>
+                                                <Option value="HARDWARE">Hardware</Option>
+                                                <Option value="MECHANICAL">Mechanical</Option>
+                                                <Option value="LOGISTICS">Logistics</Option>
+                                                <Option value="WEBSITE">Website</Option>
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item label="Stage" name="stage" style={{width: 200}}>
+                                            <Select>
+                                                <Option value="Disqualified">Disqualified</Option>
+                                                <Option value="Interview Ready">Interview Ready</Option>
+                                                <Option value="Interview PASS">Interview PASS</Option>
+                                                <Option value="Tutorial PASS">Tutorial PASS</Option>
+                                                <Option value="Internal PASS">Internal PASS</Option>
+                                                <Option value="Official Member">Official Member</Option>
+                                                <Option value="Not Started">Not Started</Option>
+                                            </Select>
+                                        </Form.Item>
+                                    </Input.Group>
+                                </Form.Item>
+                            </Form>
+                            <Button onClick={this.exportData} type="primary" style={{marginTop: "auto", marginBottom: "auto"}}>Export</Button>
+                            <Statistic title="Total Count" value={this.state.filterData.length} style={{marginTop: "auto", marginBottom: "auto"}} />
+                        </div>
                     </div>
-                </div>
+                }
                 <Table size="small" scroll={{x: "100%"}} style={{maxWidth: "100%"}} dataSource={this.state.filterData}>
                     <Column width={65} fixed="left" title="ID" dataIndex="userId" key="userId" defaultSortOrder="ascend" sorter={{compare: (a, b) => a.id - b.id, multiple: 1}}/>
                     <Column width={150} fixed="left" title="Name" dataIndex="name" key="name"/>
+                    <Column width={150} fixed="left" title="Stage" dataIndex="stage" key="stage" render={(t) => {
+                        return <Tag color={StageToColor(t)}>{t}</Tag>
+                    }}/>
                     <Column width={90} title="C Name" dataIndex="chineseName" key="chineseName"/>
                     <Column width={120} title="Nickname" dataIndex="nickName" key="nickName"/>
                     <Column width={90} title="Gender" dataIndex="gender" key="gender" render={(tag) => {
@@ -180,7 +247,41 @@ class FreshTable extends React.Component<> {
                                 )}</span>)}/>
                     <Column width={800} title="Info" dataIndex="info" key="info" />
                     <Column width={200} title="Reg Time" dataIndex="registerTime" key="registerTime" />
+                    <Column width={150} title="Operation" dataIndex="id" fixed="right" key="op" render={(_, r) =>
+                        <Button type="primary" onClick={() => this.setState({changeStageShow: true, changeStageId: r})}>Change Stage</Button>
+                    } />
                 </Table>
+                <Modal title={`Change Stage for id ${this.state.changeStageId == null ? null : this.state.changeStageId.name}`} visible={this.state.changeStageShow} keyboard={true}
+                       onCancel={this.onCancelStage}
+                       footer={[
+                           <Button key="Cancel" onClick={this.onCancelStage}>
+                               Close
+                           </Button>]
+                       }>
+                    <div>
+                        <Form onFinish={this.changeStage}>
+                            <Form.Item label="Stage" name="stage" rules={[{required: true}]}>
+                                <Select>
+                                    {FreshStageList.map(i =>
+                                        <Select.Option value={i.dbName}>{i.name}</Select.Option>
+                                    )}
+                                    <Select.Option value="FAIL"><strong style={{color: "red"}}>Disqualified</strong></Select.Option>
+                                </Select>
+                            </Form.Item>
+                            <Form.Item label="Remark" name="remark">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item>
+                                <div>
+                                    {this.state.changeStageState===0 && <Button type="primary" htmlType="submit">Submit</Button>}
+                                    {this.state.changeStageState===1 && <LoadingOutlined/>}
+                                    {this.state.changeStageState===2 && <div><CheckCircleOutlined />DONE</div>}
+                                    {this.state.changeStageState===3 && <div><CloseCircleOutlined />FAIL</div>}
+                                </div>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </Modal>
             </div>
         )
     }

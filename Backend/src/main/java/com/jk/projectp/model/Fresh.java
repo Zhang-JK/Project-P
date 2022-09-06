@@ -1,5 +1,6 @@
 package com.jk.projectp.model;
 
+import com.jk.projectp.utils.dataenum.FreshStage;
 import com.jk.projectp.utils.dataenum.Gender;
 import com.jk.projectp.utils.dataenum.Grade;
 
@@ -54,6 +55,18 @@ public class Fresh {
             joinColumns = @JoinColumn(name = "fresh_id"),
             inverseJoinColumns = @JoinColumn(name = "position_id"))
     private Set<Position> positions = new LinkedHashSet<>();
+
+    @Column(name = "stage", length = 20)
+    @Enumerated(EnumType.STRING)
+    private FreshStage stage;
+
+    public FreshStage getStage() {
+        return stage;
+    }
+
+    public void setStage(FreshStage stage) {
+        this.stage = stage;
+    }
 
     public Set<Position> getPositions() {
         return positions;

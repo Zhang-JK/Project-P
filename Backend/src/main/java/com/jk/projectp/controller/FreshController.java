@@ -4,11 +4,12 @@ import com.jk.projectp.model.Fresh;
 import com.jk.projectp.model.User;
 import com.jk.projectp.request.FreshRequest;
 import com.jk.projectp.result.BaseResult;
-import com.jk.projectp.result.FreshListResult;
 import com.jk.projectp.result.ResponseCode;
+import com.jk.projectp.result.pojo.FreshPojo;
 import com.jk.projectp.service.FreshService;
 import com.jk.projectp.service.RoleService;
 import com.jk.projectp.service.UserService;
+import com.jk.projectp.utils.dataenum.FreshStage;
 import com.jk.projectp.utils.dataenum.WebPages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,23 +38,23 @@ public class FreshController {
     RoleService roleService;
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/fresh/list")
     @ResponseBody
-    public BaseResult<Set<FreshListResult>> listFresh(HttpServletRequest request) {
+    public BaseResult<Set<FreshPojo>> listFresh(HttpServletRequest request) {
         User user = userService.checkLogin(request);
         if (user == null) {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
         if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, false)) {
-            return new BaseResult<>(ResponseCode.SUCCESS, freshService.getAll().stream().map(FreshListResult::new).collect(Collectors.toSet()));
+            return new BaseResult<>(ResponseCode.SUCCESS, freshService.getAll().stream().map(FreshPojo::new).collect(Collectors.toSet()));
         }
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/fresh/create")
     @ResponseBody
     public BaseResult<String> createFresh(@RequestBody FreshRequest data) {
@@ -87,14 +88,29 @@ public class FreshController {
         fresh.setGrade(data.getGrade());
         fresh.setMajor(data.getMajor());
         fresh.setInfo(data.getInfo());
+        fresh.setStage(FreshStage.NONE);
         fresh.setRegisterTime(LocalDateTime.now().toInstant(ZoneOffset.of("+8")));
         freshService.setPositions(fresh, data.getPositions());
         fresh.setUser(user);
-        userService.setRoles(user, new HashSet<String>(List.of("Fresh")));
+        userService.setRoles(user, new HashSet<>(List.of("Fresh")));
         if (freshService.createFresh(fresh)) {
             return new BaseResult<>(ResponseCode.SUCCESS);
         } else {
             return new BaseResult<>(ResponseCode.ITSC_ALREADY_EXIST);
         }
+    }
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
+    @GetMapping(value = "/api/fresh/stage")
+    @ResponseBody
+    public BaseResult<Integer> changeStage(HttpServletRequest request, @RequestParam Integer freshId, @RequestParam FreshStage stage, @RequestParam String msg) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        if (roleService.verifyPermission(user, WebPages.HUMAN_RESOURCE, true)) {
+            return freshService.updateStage(user, freshId, stage, msg) ? new BaseResult<>(ResponseCode.SUCCESS) : new BaseResult<>(ResponseCode.USER_NOT_EXIST);
+        }
+        return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 }

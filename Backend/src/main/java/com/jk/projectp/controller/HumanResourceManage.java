@@ -29,7 +29,7 @@ public class HumanResourceManage {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/humanResource/list")
     @ResponseBody
     public BaseResult<Set<MemberResponse>> list(HttpServletRequest request) {
@@ -43,7 +43,7 @@ public class HumanResourceManage {
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/humanResource/delete")
     @ResponseBody
     public BaseResult<Set<Integer>> delete(@RequestBody Set<Integer> ids, HttpServletRequest request) {
@@ -64,7 +64,7 @@ public class HumanResourceManage {
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/humanResource/deleteOne")
     @ResponseBody
     public BaseResult<Set<Integer>> deleteOne(@RequestParam Integer id, HttpServletRequest request) {
@@ -83,7 +83,7 @@ public class HumanResourceManage {
         return new BaseResult<>(ResponseCode.PERMISSION_DENY);
     }
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/humanResource/update")
     @ResponseBody
     public BaseResult<UserUpdateResponse> update(@RequestBody Set<User> updateUsers, HttpServletRequest request) {

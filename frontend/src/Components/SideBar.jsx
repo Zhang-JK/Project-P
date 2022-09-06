@@ -10,7 +10,6 @@ import {
     AlertOutlined,
     IdcardOutlined, LogoutOutlined
 } from "@ant-design/icons";
-import {useLocation} from "react-router-dom";
 import {navigateWithoutRefresh} from "../Utils/Utils";
 
 function getItem(label, key, icon, children) {
@@ -30,6 +29,7 @@ class SideBar extends React.Component<> {
                 getItem('Member Manage', 'memberM', <UserSwitchOutlined/>, [
                     getItem('All Users', `member`),
                     getItem('Fresh Member', `fresh`),
+                    getItem('Interview', `interview`),
                 ]),
             this.props.permissions == null || this.props.permissions['projectManage'] == null ? null :
                 getItem('Project Manage', 'project', <ScheduleOutlined/>),
@@ -55,17 +55,13 @@ class SideBar extends React.Component<> {
         ].flat();
 
         return (
-            <Menu theme="dark" defaultOpenKeys={['memberM']} defaultSelectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
-                console.log(i)
+            <Menu theme="dark" defaultOpenKeys={['memberM']} selectedKeys={this.props.selected} inlineCollapsed={false} mode="inline" items={items} onClick={(i) => {
                 switch (i.key) {
                     case ('logout'):
                         window.location.replace(`/login`)
                         break;
                     default:
-                        navigateWithoutRefresh(`/home/${i.key}`)
-                        // window.history.replaceState(null, null, )
-                        // this.props.setLocation(`/${i.key}`)
-                        // window.location.replace(`/${i.key}`)
+                        navigateWithoutRefresh(`/${i.key}`)
                 }
             }}/>
         );

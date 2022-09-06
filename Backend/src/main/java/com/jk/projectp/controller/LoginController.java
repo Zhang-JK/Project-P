@@ -4,6 +4,7 @@ import com.jk.projectp.model.User;
 import com.jk.projectp.result.BaseResult;
 import com.jk.projectp.result.UserInfoResponse;
 import com.jk.projectp.result.ResponseCode;
+import com.jk.projectp.service.FreshService;
 import com.jk.projectp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,10 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @Autowired
+    private FreshService freshService;
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/user/login")
     @ResponseBody
     public BaseResult<String> login(@RequestBody User requestUser, HttpServletResponse response) {
@@ -45,7 +49,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @PostMapping(value = "/api/user/logout")
     @ResponseBody
     public BaseResult<String> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -59,7 +63,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/user/changePassword")
     @ResponseBody
     public BaseResult<String> changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword, HttpServletRequest request) {
@@ -75,7 +79,7 @@ public class LoginController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/"}, allowCredentials = "true")
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
     @GetMapping(value = "/api/user/getInfo")
     @ResponseBody
     public BaseResult<UserInfoResponse> getInfo(HttpServletRequest request) {
@@ -84,7 +88,7 @@ public class LoginController {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
 
-        UserInfoResponse response = new UserInfoResponse(user, user.getUserProjects(), user.getRoles());
+        UserInfoResponse response = new UserInfoResponse(user, freshService.getFreshByUser(user), user.getUserProjects(), user.getRoles());
         return new BaseResult<>(ResponseCode.SUCCESS, response);
     }
 }

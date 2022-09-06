@@ -1,8 +1,9 @@
 import React from 'react';
-import {Alert, Button, Form, Input, Result, Select} from 'antd';
+import {Alert, Button, Form, Input, Result, Select, Popover} from 'antd';
 import {LoadingOutlined, RightCircleOutlined} from "@ant-design/icons";
 import postRequest from "../Request/PostRequest";
 import MD5 from "crypto-js/md5";
+import WechatGroup from '../assets/wechat.jpeg'
 const { Option } = Select;
 const { TextArea } = Input;
 
@@ -53,7 +54,19 @@ class RegisterPage extends React.Component<> {
                         <Button type="primary" onClick={() => window.location.replace("/login")}>
                             Login to Manage System
                         </Button>,
-                        <div>(Recommended to use computer to access)</div>
+                        <div>(Recommended to use computer to access)</div>,
+                        <div className="m-3 d-flex flex-column">
+                            <h4 style={{marginTop: 70}}>Join Our Recruitment Groups</h4>
+                            <Popover content={<img src={WechatGroup} alt={"WECHAT QRCODE"} style={{width: 250}}/>} title="WeChat QRCode" trigger="click">
+                                <Button type="primary" shape="round" icon={<i className="bi bi-wechat" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#04BE02", width: 150, marginLeft: "auto", marginRight: "auto", marginTop: 20}}>
+                                    WeChat
+                                </Button>
+                            </Popover>
+                            <Button type="primary" shape="round" icon={<i className="bi bi-discord" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#5865F2", width: 150, marginLeft: "auto", marginRight: "auto", marginTop: 20}}
+                            onClick={() => {window.open("https://discord.gg/S2cFZHsg8K")}}>
+                                Discord
+                            </Button>
+                        </div>
                     ]}
                 />
             )
@@ -75,6 +88,26 @@ class RegisterPage extends React.Component<> {
                             </div>
                         }
                         type="info"
+                    />
+                    <Alert
+                        style={{maxWidth: "95%", width: 1200, marginLeft: "auto", marginRight: "auto", marginBottom: 20}}
+                        message={
+                            <div className="d-flex flex-column">
+                                <h5>Join Our Recruitment Groups</h5>
+                                <div className="d-flex flex-row" style={{maxWidth: 500, marginLeft: "auto", marginRight: "auto"}}>
+                                    <Popover content={<img src={WechatGroup} alt={"WECHAT QRCODE"} style={{width: 250}}/>} title="WeChat QRCode" trigger="click">
+                                        <Button className="m-2" type="primary" shape="round" icon={<i className="bi bi-wechat" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#04BE02", width: 150, marginLeft: "auto", marginRight: "auto"}}>
+                                            WeChat
+                                        </Button>
+                                    </Popover>
+                                    <Button className="m-2" type="primary" shape="round" icon={<i className="bi bi-discord" style={{marginRight: 3}}/>} size='large' style={{backgroundColor: "#5865F2", width: 150, marginLeft: "auto", marginRight: "auto"}}
+                                            onClick={() => {window.open("https://discord.gg/S2cFZHsg8K")}}>
+                                        Discord
+                                    </Button>
+                                </div>
+                            </div>
+                        }
+                        type="warning"
                     />
                     <div className={"justify-content-center"} style={{maxWidth: "95%", width: 1200, marginLeft: "auto", marginRight: "auto", marginTop: 10}}>
                         <Form style={{width: "100%"}} labelCol={{span: 4, offset: 2}} wrapperCol={{span: 14}} onFinish={this.onFinish}>

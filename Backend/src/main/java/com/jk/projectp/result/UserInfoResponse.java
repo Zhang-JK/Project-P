@@ -1,9 +1,7 @@
 package com.jk.projectp.result;
 
-import com.jk.projectp.model.Role;
-import com.jk.projectp.model.RolePage;
-import com.jk.projectp.model.User;
-import com.jk.projectp.model.UserProject;
+import com.jk.projectp.model.*;
+import com.jk.projectp.result.pojo.FreshPojo;
 import com.jk.projectp.result.pojo.RolePojo;
 import com.jk.projectp.result.pojo.UserPojo;
 import com.jk.projectp.result.pojo.UserProjectPojo;
@@ -15,12 +13,15 @@ import java.util.Set;
 
 public class UserInfoResponse {
     UserPojo user;
+    FreshPojo freshInfo;
     Set<UserProjectPojo> projects;
     Set<RolePojo> roles;
     Map<String, Boolean> permissions;
 
-    public UserInfoResponse(User userI, Set<UserProject> projectsI, Set<Role> rolesI) {
+    public UserInfoResponse(User userI, Fresh freshInfo, Set<UserProject> projectsI, Set<Role> rolesI) {
         this.user = new UserPojo(userI);
+        if (freshInfo == null) this.freshInfo = null;
+        else this.freshInfo = new FreshPojo(freshInfo);
         this.projects = new HashSet<>();
         this.roles = new HashSet<>();
         this.permissions = new HashMap<>();
@@ -42,6 +43,14 @@ public class UserInfoResponse {
 
     public void setUser(UserPojo user) {
         this.user = user;
+    }
+
+    public FreshPojo getFreshInfo() {
+        return freshInfo;
+    }
+
+    public void setFreshInfo(FreshPojo freshInfo) {
+        this.freshInfo = freshInfo;
     }
 
     public Set<UserProjectPojo> getProjects() {
