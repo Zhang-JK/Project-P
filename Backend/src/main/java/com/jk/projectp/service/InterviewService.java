@@ -12,6 +12,9 @@ import com.jk.projectp.utils.dataenum.InterviewRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +30,9 @@ public class InterviewService {
 
     @Autowired
     private FreshDAO freshDAO;
+
+    @Autowired
+    private MailService mailService;
 
     public List<Interview> getInterviews() {
         return interviewDAO.findAll();
@@ -86,8 +92,19 @@ public class InterviewService {
         }
         fresh.setStage(FreshStage.STARTED);
         freshDAO.saveAndFlush(fresh);
-
-
+        try {
+            mailService.sendMailToUser(fresh.getUser(), "HKUST RoboMaster Team Manage System: Interview Registered Successfully",
+                    "Dear " + fresh.getName() + ",\n\n" +
+                            "You have successfully registered for the interview on " + interview.getDate().toString() + " " + interview.getStartTime() + ".\n" +
+                            "The interview room is " + interviewFresh.getRoom().getInterviewRoom() + ".\n" +
+                            "Please arrive at the interview location 5 minutes prior to the start of the interview.\n\n" +
+                            "Please refer to the link below for the interview process and interview questions. You can also find this document on our management website.\n" +
+                            "https://drive.google.com/file/d/1dR38HxJTGOpH0SPhm1boy2ZI8X5tqO_I/\n\n" +
+                            "Best Regards,\n" +
+                            "HKUST RoboMaster Team");
+        } catch (MessagingException | IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+        }
         return ResponseCode.SUCCESS;
     }
 

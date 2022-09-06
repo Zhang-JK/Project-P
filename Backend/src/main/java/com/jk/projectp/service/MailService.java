@@ -117,7 +117,7 @@ public class MailService {
 
     public Message sendMailToUser(User user, String subject, String body) throws MessagingException, IOException, GeneralSecurityException, NullPointerException {
         if (user != null)
-            return sendEmail("me", user.getEmail(), subject, body);
+            return sendEmail("robomasterhkust@gmail.com", user.getEmail(), subject, body);
         else
             throw new NullPointerException();
     }

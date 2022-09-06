@@ -166,9 +166,12 @@ export default class Personal extends React.Component {
                                 <p>Date: <strong>{this.state.interviewData.date}</strong></p>
                                 <p>Start Time: <strong>{this.state.interviewData.startTime}</strong></p>
                                 <p>Venue: <strong>{this.state.interviewData.room}</strong></p>
-                                <Button type="primary" onClick={() => this.setState({interviewTimeShow: true})}>
-                                    {this.state.interviewNotSelected === true ? "Choose" : "Edit"} Time
-                                </Button>
+                                <p>You can find interview questions <a href="https://drive.google.com/file/d/1dR38HxJTGOpH0SPhm1boy2ZI8X5tqO_I/" rel="noopener noreferrer" target="_blank">HERE</a></p>
+                                {(this.props.userInfo.freshInfo.stage === "Not Started" || this.props.userInfo.freshInfo.stage === "Interview Ready") &&
+                                    <Button type="primary" onClick={() => this.setState({interviewTimeShow: true})}>
+                                        {this.state.interviewNotSelected === true ? "Choose" : "Edit"} Time
+                                    </Button>
+                                }
                             </Card>
                             <Modal title="Select Interview Timeslot" visible={this.state.interviewTimeShow} keyboard={true}
                                    onCancel={this.onCancelInterview}
