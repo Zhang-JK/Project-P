@@ -93,15 +93,19 @@ public class InterviewService {
         fresh.setStage(FreshStage.STARTED);
         freshDAO.saveAndFlush(fresh);
         try {
-            mailService.sendMailToUser(fresh.getUser(), "HKUST RoboMaster Team Manage System: Interview Registered Successfully",
+            mailService.sendMailToUser(fresh.getUser(), "HKUST RoboMaster Team Enterprize Manage System: Interview Registered Successfully",
                     "Dear " + fresh.getName() + ",\n\n" +
+                            "Thank you for enrolling into HKUST RoboMaster Team Enterprize :)\n\n" +
                             "You have successfully registered for the interview on " + interview.getDate().toString() + " " + interview.getStartTime() + ".\n" +
                             "The interview room is " + interviewFresh.getRoom().getInterviewRoom() + ".\n" +
                             "Please arrive at the interview location 5 minutes prior to the start of the interview.\n\n" +
                             "Please refer to the link below for the interview process and interview questions. You can also find this document on our management website.\n" +
                             "https://drive.google.com/file/d/1dR38HxJTGOpH0SPhm1boy2ZI8X5tqO_I/\n\n" +
                             "Best Regards,\n" +
-                            "HKUST RoboMaster Team");
+                            "HKUST RoboMaster Team Enterprize \n" +
+                            "G04, UG HALL VIII, HKUST, Clear Water Bay\n" +
+                            "Sai Kung, Hong Kong\n" +
+                            "http://laojk.club/");
         } catch (MessagingException | IOException | GeneralSecurityException e) {
             e.printStackTrace();
         }
