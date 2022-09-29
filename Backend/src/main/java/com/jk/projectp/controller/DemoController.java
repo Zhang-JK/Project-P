@@ -6,6 +6,7 @@ import com.jk.projectp.result.BaseResult;
 import com.jk.projectp.result.ResponseCode;
 import com.jk.projectp.result.pojo.DemoPojo;
 import com.jk.projectp.service.UserService;
+import com.jk.projectp.service.DemoService;
 import com.jk.projectp.utils.dataenum.WebPages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +23,8 @@ import java.util.Objects;
 public class DemoController {
 
 
-//   @Autowired
-//   private DemoService demoService;
+   @Autowired
+   private DemoService demoService;
 
     @Autowired
     private UserService userService;
@@ -37,8 +38,7 @@ public class DemoController {
             return new BaseResult<>(ResponseCode.NOT_LOGIN);
         }
 
-//        return new BaseResult<>(ResponseCode.SUCCESS, demoService.getDemos().stream().map(DemoPojo::new).toList());
-        return null;
+        return new BaseResult<>(ResponseCode.SUCCESS, demoService.getDemos().stream().map(DemoPojo::new).toList());
     }
 
 }

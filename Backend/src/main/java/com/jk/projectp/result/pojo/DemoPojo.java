@@ -1,6 +1,7 @@
 package com.jk.projectp.result.pojo;
 
 import java.time.LocalDate;
+import com.jk.projectp.model.Demo;
 
 public class DemoPojo {
     private Integer id;
@@ -20,7 +21,10 @@ public class DemoPojo {
     public Boolean getFull() { return isFull; }
     public void setFull(Boolean full) { this.isFull = full; }
 
-//    public DemoPojo(Demo d) {
-//        ;
-//    }
+    public DemoPojo(Demo d) {
+        this.id = d.getId();
+        this.date = d.getDate();
+        this.startTime = d.getStartTime();
+        this.isFull = d.getFull();
+    }
 }
