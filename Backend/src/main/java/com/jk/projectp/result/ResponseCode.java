@@ -23,6 +23,11 @@ public enum ResponseCode {
     INTERVIEW_NOT_EXIST(1101, "Interview ID do not exist"),
     INTERVIEW_FULL(1102, "Selected interview timeslot is full"),
     INTERVIEW_ERROR(1103, "Error in creating interview"),
+
+    DEMO_NOT_EXIST(1201, "Demo ID do not exist"),
+    DEMO_FULL(1202, "Selected demo timeslot is full"),
+
+    DEMO_ERROR(1203, "Error in creating demo"),
     ;
 
     private final int code;

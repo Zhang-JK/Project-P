@@ -1,10 +1,12 @@
 package com.jk.projectp.controller;
 
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.jk.projectp.model.DemoFresh;
 import com.jk.projectp.model.User;
 import com.jk.projectp.result.BaseResult;
 import com.jk.projectp.result.ResponseCode;
 import com.jk.projectp.result.pojo.DemoPojo;
+import com.jk.projectp.result.pojo.DemoInfoPojo;
 import com.jk.projectp.service.UserService;
 import com.jk.projectp.service.DemoService;
 import com.jk.projectp.utils.dataenum.WebPages;
@@ -39,6 +41,23 @@ public class DemoController {
         }
 
         return new BaseResult<>(ResponseCode.SUCCESS, demoService.getDemos().stream().map(DemoPojo::new).toList());
+    }
+
+    @CrossOrigin(origins = {"http://localhost:3000/", "http://laojk.club/", "http://asoul.chaoshi.me/", "http://10.89.51.52:3000/"}, allowCredentials = "true")
+    @GetMapping(value = "/api/demo/update")
+    @ResponseBody
+    public BaseResult<String> update(HttpServletRequest request, @RequestParam Integer freshId, @RequestParam Integer demoId) {
+        User user = userService.checkLogin(request);
+        if (user == null) {
+            return new BaseResult<>(ResponseCode.NOT_LOGIN);
+        }
+        ResponseCode code = demoService.updateDemo(user.getId(), freshId, demoId);
+        if (code == ResponseCode.SUCCESS) {
+            DemoFresh demoFresh = demoService.getInfoByFreshId(freshId);
+            return new BaseResult<>(ResponseCode.SUCCESS, new DemoInfoPojo(demoFresh).toString());
+        } else {
+            return new BaseResult<>(code);
+        }
     }
 
 }
