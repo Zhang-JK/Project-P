@@ -5,6 +5,7 @@ import com.jk.projectp.utils.dataenum.Gender;
 import com.jk.projectp.utils.dataenum.Grade;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -56,9 +57,46 @@ public class Fresh {
             inverseJoinColumns = @JoinColumn(name = "position_id"))
     private Set<Position> positions = new LinkedHashSet<>();
 
+    @ManyToMany
+    @JoinTable(name = "self_review_direction",
+            joinColumns = @JoinColumn(name = "fresh_id"),
+            inverseJoinColumns = @JoinColumn(name = "direction_id"))
+    private Set<Direction> directions = new LinkedHashSet<>();
+
+    public Set<Direction> getDirections() {
+        return directions;
+    }
+    public void setDirections(Set<Direction> directions) {
+        this.directions = directions;
+    }
+
     @Column(name = "stage", length = 20)
     @Enumerated(EnumType.STRING)
     private FreshStage stage;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private InternGroup group;
+
+    @Size(max = 255)
+    @Column(name = "photo_path")
+    private String photoPath;
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
+    }
+
+    public InternGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(InternGroup group) {
+        this.group = group;
+    }
 
     public FreshStage getStage() {
         return stage;

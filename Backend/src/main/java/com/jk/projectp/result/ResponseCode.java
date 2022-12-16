@@ -20,10 +20,16 @@ public enum ResponseCode {
     FRESH_POSITION_NOT_SELECTED(1017, "Fresh positions not selected!"),
     CREATE_ANNOUNCEMENT_ERROR(1018, "Error in creating announcement"),
 
+    CREATE_GROUP_ERROR(1019, "Group number already exist!"),
+    SET_INTERN_GROUP_ERROR(1020, "Error in creating intern group!(no such group or no such fresh)"),
+
+    FRESH_NOT_EXIST(1021, "Fresh not exist!"),
     INTERVIEW_NOT_EXIST(1101, "Interview ID do not exist"),
     INTERVIEW_FULL(1102, "Selected interview timeslot is full"),
     INTERVIEW_ERROR(1103, "Error in creating interview"),
-    ;
+    PEER_REVIEW_ERROR(1022, "You and target fresh are not in the same group!"),
+
+    PEER_REVIEW_NOT_EXIST(1023, "No yet reviewed!");
 
     private final int code;
     private final String msg;
